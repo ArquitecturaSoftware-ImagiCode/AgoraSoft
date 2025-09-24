@@ -1,20 +1,33 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Usuario } from '../../modelos/Usuario';
+import { UsuarioService } from '../../servicios/usuario.service';
 
 @Component({
   selector: 'app-usuario',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './usuario.html',
-  styleUrl: './usuario.css'
+  styleUrls: ['./usuario.css']
 })
-export class Usuario {
+export class UsuarioComponente {
 
-  public id?: number;
-  public nombre?: string;
-  public correo?: string;
+  nuevoUsuario: Usuario = new Usuario(0, "", "");
+  usuarios: Usuario[] = [];
 
-  constructor( id?: number, nombre?: string, correo?: string) {
-    this.id = id;
-    this.nombre = nombre;
-    this.correo = correo;
+  constructor(private usuarioService: UsuarioService) {}
+
+  ngOnInit(): void {
+    this.cargarUsuarios();
   }
+
+  cargarUsuarios(): void {
+    this.usuarioService.getUsuarios().subscribe(data => {
+      this.usuarios = data;
+    });
+  }
+
+
+
 }

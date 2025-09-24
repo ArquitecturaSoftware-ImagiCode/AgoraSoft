@@ -17,12 +17,15 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
+    // GET: traer todos los usuarios
     @GetMapping
     public List<Usuario> listarUsuarios() {
         return usuarioService.obtenerUsuarios();
     }
-    @GetMapping("/")
-    public Usuario obtenerUsuarioPorId() {
-        return new Usuario( 1L, "Juan Perez","" );
+
+    // GET: traer usuario por id
+    @GetMapping("/{id}")
+    public Usuario obtenerUsuarioPorId(@PathVariable Long id) {
+        return usuarioService.obtenerUsuarioPorId(id);
     }
 }
