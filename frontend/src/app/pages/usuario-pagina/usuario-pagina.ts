@@ -1,21 +1,31 @@
-import {Component, OnInit} from '@angular/core';
-import {Usuario} from '../../componentes/usuario/usuario';
-import {UsuarioService} from '../../servicios/usuario.service';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Usuario } from '../../modelos/Usuario';
+import { UsuarioService } from '../../servicios/usuario.service';
 
 @Component({
   selector: 'app-usuario-pagina',
-  imports: [],
+  imports: [CommonModule, FormsModule], //
   templateUrl: './usuario-pagina.html',
-  styleUrl: './usuario-pagina.css'
+  styleUrls: ['./usuario-pagina.css']
 })
-export class UsuarioPagina implements OnInit{
-  usuarios :Usuario[] =  [];
-  usuario: Usuario = new Usuario();
-  constructor(private usuarioService: UsuarioService){}
+export class UsuarioPagina implements OnInit {
+  usuarios: Usuario[] = [];
+  nuevoUsuario: Usuario = new Usuario(0, "", "");
+
+  constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
-    this.usuarioService.obtenerUsuarioPorId(3).subscribe((data: Usuario) => {
-      this.usuario = new Usuario(data.id, data.nombre, data.correo);
+    this.cargarUsuarios();
+  }
+
+  cargarUsuarios(): void {
+    this.usuarioService.getUsuarios().subscribe({
+      next: (data) => this.usuarios = data,
+      error: (err) => console.error('Error cargando usuarios', err)
     });
   }
+
+
 }

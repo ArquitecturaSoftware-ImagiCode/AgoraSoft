@@ -1,10 +1,9 @@
 package com.imagicode.agorasoft.entidades;
-import com.imagicode.agorasoft.entidades.Usuario;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "usuario", schema = "inventario")
 public class Usuario {
 
     @Id
@@ -12,16 +11,20 @@ public class Usuario {
     private Long id;
 
     private String nombre;
-
     private String correo;
 
+    // 🔹 Constructor vacío requerido por Hibernate
+    public Usuario() {
+    }
+
+    // 🔹 Constructor con parámetros (opcional)
     public Usuario(Long id, String nombre, String correo) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
     }
 
-    // Getters y setters
+    // Getters y Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
