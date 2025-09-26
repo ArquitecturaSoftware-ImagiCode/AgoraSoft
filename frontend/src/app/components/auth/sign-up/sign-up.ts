@@ -63,16 +63,4 @@ export class SignUp implements OnInit, OnDestroy {
       console.error(err);
     }
   }
-
-  openSignUp() {
-    this.clerkService.openSignUp();
-  }
-
-  closeSignUp() {
-    this.clerkService.closeSignUp();
-  }
-
-  toggleSignUp() {
-    this.isMounted ? this.unmountSignUp() : this.mountSignUp();
-  }
 }
