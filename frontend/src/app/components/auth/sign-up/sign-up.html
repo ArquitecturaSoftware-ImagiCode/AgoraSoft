@@ -1,0 +1,12 @@
+<p>Hola Mundo</p>
+<div #signUpContainer class="sign-up-container"></div>
+
+<div class="controls">
+  <button (click)="openSignUp()" class="btn btn-primary">Abrir SignUp</button>
+  <button (click)="closeSignUp()" class="btn btn-secondary">Cerrar SignUp</button>
+  <button (click)="toggleSignUp()" class="btn btn-info">
+    {{ isMounted ? 'Desmontar' : 'Montar' }} SignUp
+  </button>
+</div>
+
+<div *ngIf="error" class="error">{{ error }}</div>
