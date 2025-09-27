@@ -1,26 +1,28 @@
-<div class="container">
-  <h2>Lista de Usuarios</h2>
+<h2>Agregar nuevo usuario</h2>
+<form (ngSubmit)="crearUsuario(nombre.value, correo.value)">
+  <input type="text" #nombre placeholder="Nombre" required>
+  <input type="email" #correo placeholder="Correo" required>
+  <button type="submit">Crear</button>
+</form>
 
-  <!-- Tabla de usuarios -->
-  <table>
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Correo</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let usuario of usuarios">
-      <td>{{ usuario.id }}</td>
-      <td>{{ usuario.nombre }}</td>
-      <td>{{ usuario.correo }}</td>
-    </tr>
-    </tbody>
-  </table>
+<hr />
 
-  <hr>
+<h2>Lista de usuarios</h2>
+<ul>
+  <li *ngFor="let usuario of usuarios">
+    <!-- Vista normal -->
+    <span *ngIf="!usuarioEditando || usuarioEditando.id !== usuario.id">
+      {{ usuario.nombre }} ({{ usuario.correo }})
+      <button (click)="editarUsuario(usuario)">Editar</button>
+      <button *ngIf="usuario.id" (click)="eliminarUsuario(usuario.id!)">Eliminar</button>
+    </span>
 
-  <h3>Agregar nuevo usuario</h3>
 
-</div>
+    <span *ngIf="usuarioEditando && usuarioEditando.id === usuario.id">
+      <input [(ngModel)]="usuarioEditando.nombre" name="editNombre" placeholder="Nombre">
+      <input [(ngModel)]="usuarioEditando.correo" name="editCorreo" placeholder="Correo">
+      <button (click)="guardarEdicion()">Guardar</button>
+      <button (click)="cancelarEdicion()">Cancelar</button>
+    </span>
+  </li>
+</ul>
