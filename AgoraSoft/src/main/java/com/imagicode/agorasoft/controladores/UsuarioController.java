@@ -28,4 +28,23 @@ public class UsuarioController {
     public Usuario obtenerUsuarioPorId(@PathVariable Long id) {
         return usuarioService.obtenerUsuarioPorId(id);
     }
+
+    // POST: insertar un nuevo usuario
+    @PostMapping
+    public Usuario crearUsuario(@RequestBody Usuario usuario) {
+        return usuarioService.guardarUsuario(usuario);
+    }
+
+    // PUT: actualizar usuario por id
+    @PutMapping("/{id}")
+    public Usuario actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+        usuario.setId(id); // aseguramos que se actualice el correcto
+        return usuarioService.guardarUsuario(usuario);
+    }
+
+    // DELETE: eliminar usuario por id
+    @DeleteMapping("/{id}")
+    public void eliminarUsuario(@PathVariable Long id) {
+        usuarioService.eliminarUsuario(id);
+    }
 }

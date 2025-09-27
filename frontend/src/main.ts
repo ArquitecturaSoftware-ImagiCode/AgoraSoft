@@ -1,11 +1,6 @@
-import { ApplicationConfig } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { routes} from './app/app.routes';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { UsuarioPagina } from './app/pages/usuario-pagina/usuario-pagina';
+import { appConfig } from './app/app.config';
 
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideRouter(routes),
-    provideHttpClient()
-  ]
-};
+bootstrapApplication(UsuarioPagina, appConfig)
+  .catch(err => console.error(err));
