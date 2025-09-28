@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Usuario } from '../../models/Usuario';
 import { UsuarioService } from '../../services/usuario.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-usuario-pagina',
