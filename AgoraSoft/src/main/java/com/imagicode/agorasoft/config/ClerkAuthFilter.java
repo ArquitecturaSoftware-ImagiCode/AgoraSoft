@@ -50,7 +50,7 @@ public class ClerkAuthFilter implements Filter {
             RequestState requestState = AuthenticateRequest.authenticateRequest(
                     headers,
                     AuthenticateRequestOptions
-                            .secretKey("sk_test_7a1HcUHsKghtAnl7mJYhMEbVYEyngXAZpwWreNhQxx")
+                            .secretKey("sk_test_GNj2mKLiTHeAdLs1kF7RR0vvVZ2dzVGrVgiGIrqsVF")
                             .authorizedParty("http://localhost:4200") // ⚠️ Verifica esto
                             .build()
             );
