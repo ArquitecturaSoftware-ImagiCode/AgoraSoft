@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Usuario } from '../../modelos/Usuario';
-import { UsuarioService } from '../../servicios/usuario.service';
+import { Usuario } from '../../models/Usuario';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-usuario',
