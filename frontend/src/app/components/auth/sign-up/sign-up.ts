@@ -1,66 +1,113 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClerkService } from '../../../services/clerk.service';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.html',
   styleUrls: ['./sign-up.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
 })
-export class SignUp implements OnInit, OnDestroy {
-  @ViewChild('signUpContainer', { static: true }) signUpContainer!: ElementRef<HTMLDivElement>;
-  
-  isMounted = false;
-  error: string | null = null;
+export class SignUp {
+  signUpForm: FormGroup;
+  roles = ['comercial', 'proveedor', 'operador'];
+  organizaciones = ['Corabastos', 'La concordia', '7 de Agosto'];
+  submitted = false;
+  step: 'register' | 'verify' = 'register';
+  code = '';
+  signedIn: any;
+  usuario: any;
 
-  constructor(private clerkService: ClerkService) {}
+  constructor(private fb: FormBuilder, private clerkService: AuthService, private router: Router) {
+    this.signUpForm = this.fb.group({
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      organizacion: ['', Validators.required],
+      rol: ['', Validators.required],
+      correo: ['', [Validators.required, Validators.email]],
+      contrasena: ['', [Validators.required, Validators.minLength(6)]],
+    });
+    this.signedIn = this.clerkService.isSignedIn();
+    this.usuario = this.clerkService.getClerkInstance()?.user;
+  }
 
-  async ngOnInit() {
-    try {
-      // Inicializa Clerk
-      await this.clerkService.initializeClerk();
+  get f() {
+    return this.signUpForm.controls;
+  }
 
-      // Monta SignUp apenas se inicializa
-      this.mountSignUp();
-    } catch (err) {
-      this.error = 'Error al inicializar Clerk: ' + err;
-      console.error(err);
+  onSubmit() {
+    this.submitted = true;
+    if (this.signUpForm.valid) {
+      console.log(this.signUpForm.value);
+
+      this.onRegister();
     }
   }
 
-  ngOnDestroy() {
-    this.unmountSignUp();
-  }
-
-  mountSignUp() {
-    if (!this.signUpContainer?.nativeElement) return;
+  async onRegister() {
     try {
-      this.clerkService.mountSignUp(this.signUpContainer.nativeElement, {
-        appearance: {
-          elements: { formButtonPrimary: 'bg-blue-500 hover:bg-blue-600 text-white' }
-        },
-        signInUrl: '/sign-in',
-        redirectUrl: '/dashboard'
-      });
-      this.isMounted = true;
-      this.error = null;
+      await this.clerkService.signUp(
+        this.signUpForm.value.nombre,
+        this.signUpForm.value.apellido,
+        this.signUpForm.value.correo,
+        this.signUpForm.value.contrasena,
+        this.signUpForm.value.rol,
+        this.signUpForm.value.organizacion
+      );
+      await this.clerkService.sendVerification();
+      this.step = 'verify';
     } catch (err) {
-      this.error = 'Error al montar SignUp: ' + err;
-      console.error(err);
+      console.error('Error en registro:', err);
     }
   }
 
-  unmountSignUp() {
-    if (!this.signUpContainer?.nativeElement || !this.isMounted) return;
+  async onVerify() {
     try {
-      this.clerkService.unmountSignUp(this.signUpContainer.nativeElement);
-      this.isMounted = false;
-      this.error = null;
+      const result = await this.clerkService.verifyEmail(this.code);
+      if (result?.status === 'complete') {
+        await this.clerkService.getClerkInstance()?.setActive({
+          session: result.createdSessionId,
+        });
+
+        // Obtener usuario de Clerk
+        const clerkUser = await this.clerkService.getClerkInstance().user;
+        if (clerkUser) {
+          // Construir el objeto para el backend
+          const usuarioBackend = {
+            id: clerkUser.id,
+            nombre: clerkUser.firstName,
+            apellido: clerkUser.lastName,
+            correo: clerkUser.emailAddresses?.[0]?.emailAddress,
+            rol: clerkUser.unsafeMetadata?.['role'],
+            organizacion: clerkUser.unsafeMetadata?.['plaza']
+          };
+          // Enviar al backend
+          await fetch('http://localhost:8080/usuarios', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(usuarioBackend)
+          });
+        }
+
+        const role = await this.clerkService.getUserRole();
+        if (role) {
+          this.router.navigate([`/${role}/dashboard`]);
+        } else {
+          this.router.navigate(['/dashboard']); // fallback
+        }
+      }
+      console.log("HI: " + result?.status)
     } catch (err) {
-      this.error = 'Error al desmontar SignUp: ' + err;
-      console.error(err);
+      console.error('Error en verificación:', err);
     }
   }
 }

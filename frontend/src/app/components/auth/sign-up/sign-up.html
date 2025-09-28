@@ -1,3 +1,101 @@
-<div #signUpContainer class="sign-up-container shadow-none"></div>
+<div class="w-full flex justify-center items-center min-h-screen" *ngIf="step === 'register'">
+  <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="space-y-5">
+    <div>
+      <h1 class="text-3xl font-bold">Registro de usuario</h1>
+      <p class="text-gray-500 text-sm mt-2">Completa todos los campos para crear tu cuenta.</p>
+    </div>
+    <div class="mt-5">
+      <div class="grid grid-cols-2 gap-4">
+        <fieldset class="fieldset">
+          <legend class="text-md">Nombre</legend>
+          <input type="text" class="input w-full" placeholder="ej. Juan" formControlName="nombre" />
+          <p class="label text-red-500" *ngIf="submitted && f['nombre'].errors">Nombre es obligatorio</p>
+        </fieldset>
+        <fieldset class="fieldset">
+          <legend class="text-md">Apellido</legend>
+          <input
+            type="text"
+            class="input w-full"
+            placeholder="ej. Pérez"
+            formControlName="apellido"
+          />
+          <p class="label text-red-500" *ngIf="submitted && f['apellido'].errors">Apellido es obligatorio</p>
+        </fieldset>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <fieldset class="fieldset">
+          <legend class="text-md">Organización</legend>
+          <select class="select w-full" formControlName="organizacion">
+            <option disabled value="">Selecciona organización</option>
+            <option *ngFor="let org of organizaciones" [value]="org">{{ org }}</option>
+          </select>
+          <p class="label text-red-500" *ngIf="submitted && f['organizacion'].errors">Organizacion es obligatorio</p>
+        </fieldset>
+        <fieldset class="fieldset">
+          <legend class="text-md">Rol</legend>
+          <select class="select w-full" formControlName="rol">
+            <option disabled value="">Selecciona rol</option>
+            <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+          </select>
+          <p class="label text-red-500" *ngIf="submitted && f['rol'].errors">Rol es obligatorio</p>
+        </fieldset>
+      </div>
+      <fieldset class="fieldset">
+        <legend class="text-md">Correo</legend>
+        <input
+          type="email"
+          class="input w-full"
+          placeholder="ej. correo@email.com"
+          formControlName="correo"
+        />
+        <p class="label" *ngIf="submitted && f['correo'].errors">
+          <span class="text-red-500" *ngIf="f['correo'].errors['required']">Correo es obligatorio</span>
+          <span class="text-red-500" *ngIf="f['correo'].errors['email']">Correo inválido</span>
+        </p>
+      </fieldset>
+      <fieldset class="fieldset">
+        <legend class="text-md">Contraseña</legend>
+        <input
+          type="password"
+          class="input w-full"
+          placeholder="Contraseña"
+          formControlName="contrasena"
+        />
+        <p class="label" *ngIf="submitted && f['contrasena'].errors">
+          <span class="text-red-500" *ngIf="f['contrasena'].errors['required']">Contraseña es obligatoria</span>
+          <span class="text-red-500" *ngIf="f['contrasena'].errors['minlength']"
+            >Mínimo 6 caracteres</span
+          >
+        </p>
+      </fieldset>
+      <button class="btn bg-blue-900 text-white w-full mt-4" type="submit">Registrarse</button>
+    </div>
+    <div class="flex justify-between text-sm items-center">
+      <p class="text-gray-500">¿Ya tienes una cuenta?</p>
+      <a class="text-blue-800 underline" routerLink="/login"> Iniciar Sesion </a>
+    </div>
+  </form>
+</div>
+<div class="w-full flex justify-center items-center min-h-screen" *ngIf="step === 'verify'">
+  <form class="w-full max-w-md" (ngSubmit)="onVerify()">
+    <h1 class="text-3xl font-bold">Verifica tu codigo</h1>
+    <p class="text-gray-500 text-sm mt-3">Ingresa el codigo que hemos enviado a tu correo.</p>
 
-<div *ngIf="error" class="error">{{ error }}</div>
+    <div class="flex flex-col mt-5 gap-4 w-full">
+      <fieldset class="fieldset w-full">
+        <legend class="text-md">Codigo enviado</legend>
+        <input
+          class="input w-full"
+          type="number"
+          [(ngModel)]="code"
+          name="code"
+          placeholder="ej. 393781"
+          required
+        />
+        <p class="label text-red-500" *ngIf="submitted && f['nombre'].errors">Requerido</p>
+      </fieldset>
+
+      <button class="btn bg-blue-800 text-white w-full" type="submit">Verificar</button>
+    </div>
+  </form>
+</div>

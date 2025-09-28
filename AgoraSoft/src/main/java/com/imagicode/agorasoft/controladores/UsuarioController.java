@@ -25,7 +25,19 @@ public class UsuarioController {
 
     // GET: traer usuario por id
     @GetMapping("/{id}")
-    public Usuario obtenerUsuarioPorId(@PathVariable Long id) {
+    public Usuario obtenerUsuarioPorId(@PathVariable String id) {
         return usuarioService.obtenerUsuarioPorId(id);
+    }
+
+    // POST: crear usuario
+    @PostMapping
+    public Usuario crearUsuario(@RequestBody Usuario usuario) {
+        return usuarioService.crearUsuario(usuario);
+    }
+
+    // DELETE: eliminar usuario
+    @DeleteMapping("/{id}")
+    public void eliminarUsuario(@PathVariable String id) {
+        usuarioService.eliminarUsuario(id);
     }
 }
