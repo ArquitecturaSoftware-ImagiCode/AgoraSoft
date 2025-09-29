@@ -1,6 +1,13 @@
-import { bootstrapApplication } from '@angular/platform-browser';
-import { UsuarioPagina } from './app/pages/usuario-pagina/usuario-pagina';
-import { appConfig } from './app/app.config';
 
-bootstrapApplication(UsuarioPagina, appConfig)
-  .catch(err => console.error(err));
+import { bootstrapApplication } from '@angular/platform-browser';
+import { App } from './app/app';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { routes } from './app/app.routes';
+
+bootstrapApplication(App, {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(withFetch())
+  ]
+});

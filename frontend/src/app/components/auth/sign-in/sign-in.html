@@ -1,0 +1,49 @@
+<div class="w-full flex justify-center items-center min-h-screen">
+  <form [formGroup]="signInForm" (ngSubmit)="onSubmit()" class="space-y-5">
+    <div>
+      <h1 class="text-3xl font-bold">Inicia Sesion</h1>
+      <p class="text-gray-500 text-sm mt-2">Completa todos los campos para iniciar Sesion.</p>
+    </div>
+    <div class="mt-5">
+      <fieldset class="fieldset">
+        <legend class="text-md">Correo</legend>
+        <input
+          type="email"
+          class="input w-full"
+          placeholder="ej. correo@email.com"
+          formControlName="correo"
+        />
+        <p class="label" *ngIf="submitted && f['correo'].errors">
+          <span class="text-red-500" *ngIf="f['correo'].errors['required']"
+            >Correo es obligatorio</span
+          >
+          <span class="text-red-500" *ngIf="f['correo'].errors['email']">Correo inválido</span>
+        </p>
+      </fieldset>
+      <fieldset class="fieldset">
+        <legend class="text-md">Contraseña</legend>
+        <input
+          type="password"
+          class="input w-full"
+          placeholder="Contraseña"
+          formControlName="contrasena"
+        />
+        <p class="label" *ngIf="submitted && f['contrasena'].errors">
+          <span class="text-red-500" *ngIf="f['contrasena'].errors['required']"
+            >Contraseña es obligatoria</span
+          >
+          <span class="text-red-500" *ngIf="f['contrasena'].errors['minlength']"
+            >Mínimo 6 caracteres</span
+          >
+        </p>
+      </fieldset>
+      <button class="btn bg-blue-900 text-white w-full mt-4" type="submit">Iniciar Sesion</button>
+    </div>
+    <div class="flex justify-between text-sm items-center">
+      <p class="text-gray-500">¿No tienes cuenta?</p>
+      <a class="text-blue-800 underline" routerLink="/register"> Crear cuenta </a>
+    </div>
+  </form>
+  <p>
+  </p>
+</div>

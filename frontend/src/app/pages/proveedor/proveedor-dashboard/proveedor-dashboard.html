@@ -1,0 +1,12 @@
+<main>
+  <h1 class="text-3xl font-bold">Dashboard Proveedor</h1>
+  <div>
+    <div *ngIf="usuario">
+      <h2>Usuario</h2>
+      <pre>{{ usuario | json }}</pre>
+    </div>
+    <div *ngIf="!usuario">
+      <p>No se pudo cargar la información del usuario.</p>
+    </div>
+  </div>
+</main>

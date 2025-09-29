@@ -19,16 +19,15 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public Usuario obtenerUsuarioPorId(Long id) {
+    public Usuario obtenerUsuarioPorId(String id) {
         return usuarioRepository.findById(id).orElse(null);
     }
 
-    public Usuario guardarUsuario(Usuario usuario) {
+    public Usuario crearUsuario(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
 
-
-    public void eliminarUsuario(Long id) {
+    public void eliminarUsuario(String id) {
         usuarioRepository.deleteById(id);
     }
 }
