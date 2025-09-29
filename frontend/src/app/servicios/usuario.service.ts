@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario } from '../modelos/Usuario';
-import axios = require('axios');
+import { environment } from '../../environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl = 'http://localhost:8080/usuarios';
+  private apiUrl = `${environment.apiBaseUrl}/usuarios`;
 
   constructor(private http: HttpClient) {}
 
@@ -38,6 +38,6 @@ export class UsuarioService {
   }
 
   agregarUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>('http://localhost:8080/usuarios', usuario);
+    return this.http.post<Usuario>(`${environment.apiBaseUrl}/usuarios`, usuario);
   }
 }
