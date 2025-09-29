@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuario } from '../models/Usuario';
+import { Usuario } from '../modelos/Usuario';
+import axios = require('axios');
 
 @Injectable({
   providedIn: 'root'
