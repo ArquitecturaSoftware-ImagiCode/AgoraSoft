@@ -1,46 +1,36 @@
-
 package com.imagicode.agorasoft.entidades;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(schema ="inventario",name = "usuario")
+@Table(name = "usuario", schema = "inventario")
 public class Usuario {
+
     @Id
-    private String id; // Se debe pasar manualmente
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String nombre;
-    private String apellido;
     private String correo;
-    private String rol;
-    private String organizacion;
 
-    public Usuario() {}
-
-    public Usuario(String id, String nombre, String apellido, String correo, String rol, String organizacion) {
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.correo = correo;
-        this.rol = rol;
-        this.organizacion = organizacion;
+    // 🔹 Constructor vacío requerido por Hibernate
+    public Usuario() {
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    // 🔹 Constructor con parámetros (opcional)
+    public Usuario(Long id, String nombre, String correo) {
+        this.id = id;
+        this.nombre = nombre;
+        this.correo = correo;
+    }
+
+    // Getters y Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getApellido() { return apellido; }
-    public void setApellido(String apellido) { this.apellido = apellido; }
-
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
-
-    public String getRol() { return rol; }
-    public void setRol(String rol) { this.rol = rol; }
-
-    public String getOrganizacion() { return organizacion; }
-    public void setOrganizacion(String organizacion) { this.organizacion = organizacion; }
 }
