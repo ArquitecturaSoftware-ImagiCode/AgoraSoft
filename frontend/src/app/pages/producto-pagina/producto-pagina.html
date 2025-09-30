@@ -1,0 +1,34 @@
+<h2>Agregar nuevo producto</h2>
+<form (ngSubmit)="crearProducto(nombre.value, seccion.value, cantidad.value, precio.value)">
+  <input type="text" #nombre placeholder="Nombre Producto" required>
+  <select #seccion required>
+    <option value="Fruta">Fruta</option>
+    <option value="Verdura">Verdura</option>
+  </select>
+  <input type="text" #cantidad placeholder="Cantidad (libras)" required>
+  <input type="text" #precio placeholder="Precio (COP)" required>
+  <button type="submit">Crear</button>
+</form>
+
+<hr />
+
+<h2>Lista de Productos</h2>
+
+<ul>
+  <li *ngFor="let producto of productos">
+    <span *ngIf="!productoEditando || productoEditando.id !== producto.id">
+      {{ producto.nombreProducto }} - {{ producto.cantiLibra }} lbs - {{ producto.preciLibra }} COP - ({{ producto.seccion }})
+      <button (click)="editarProducto(producto)">Editar</button>
+      <button (click)="eliminarProducto(producto.id!)">Eliminar</button>
+    </span>
+
+    <span *ngIf="productoEditando && productoEditando.id === producto.id">
+      <input [(ngModel)]="productoEditando.nombreProducto" name="editNombre" placeholder="Nombre">
+      <input [(ngModel)]="productoEditando.cantiLibra" name="editCantidad" placeholder="Cantidad">
+      <input [(ngModel)]="productoEditando.preciLibra" name="editPrecio" placeholder="Precio">
+      <input [(ngModel)]="productoEditando.seccion" name="editSeccion" placeholder="Sección">
+      <button (click)="guardarEdicion()">Guardar</button>
+      <button (click)="cancelarEdicion()">Cancelar</button>
+    </span>
+  </li>
+</ul>
