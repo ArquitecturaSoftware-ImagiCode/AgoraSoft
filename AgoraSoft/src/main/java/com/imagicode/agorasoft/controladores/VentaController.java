@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequestMapping("/ventas")
 public class VentaController {
 
-    @Autowired
+     @Autowired
     private VentaService ventaService;
 
     @Autowired
@@ -39,6 +39,12 @@ public class VentaController {
         return venta.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Obtener ventas por local_id
+    @GetMapping("/local/{localId}")
+    public List<Venta> getVentasByLocalId(@PathVariable Long localId) {
+        return ventaService.findByLocalId(localId);
+    }
+
     
 
     
@@ -52,4 +58,5 @@ public class VentaController {
         ventaService.delete(id);
         return ResponseEntity.noContent().build();
     }
+    
 }

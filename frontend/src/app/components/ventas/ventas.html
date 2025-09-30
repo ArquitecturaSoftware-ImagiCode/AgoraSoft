@@ -1,0 +1,26 @@
+<div>
+  <h2>Ventas</h2>
+
+  <!-- Mostrar todas las ventas -->
+  <table *ngIf="ventas.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Local ID</th>
+        <th>Fecha</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let venta of ventas">
+        <td>{{ venta.id }}</td>
+        <td>{{ venta.localId }}</td>
+        <td>{{ venta.fecha }}</td>
+        <td>{{ venta.total | currency }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Si no hay ventas -->
+  <p *ngIf="ventas.length === 0">No hay ventas disponibles.</p>
+</div>

@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 public class VentaService {
 
-    @Autowired
+     @Autowired
     private VentaRepository ventaRepository;
 
     // Obtener todas las ventas
@@ -25,6 +25,11 @@ public class VentaService {
     // Obtener una venta por ID
     public Optional<Venta> findById(Long id) {
         return ventaRepository.findById(id);
+    }
+
+    // Obtener ventas por local_id
+    public List<Venta> findByLocalId(Long localId) {
+        return ventaRepository.findByLocalId(localId);
     }
 
     // Guardar una nueva venta
