@@ -1,19 +1,21 @@
-package com.imagicode.agorasoft.agorasoft.controladores;
+package com.imagicode.agorasoft.controladores;
 
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PatchMapping;
-import com.imagicode.agorasoft.agorasoft.entidades.Producto;
-import com.imagicode.agorasoft.agorasoft.servicios.ProductoService;
+
+import com.imagicode.agorasoft.entidades.Producto;
+import com.imagicode.agorasoft.servicios.ProductoService;
 
 @RestController
 @RequestMapping("/inventario")
@@ -30,7 +32,7 @@ public class ProductoController {
     public List<Producto> listaProductos() {
         return productoService.obtenerProductos();
     }
-/*
+
     // GET: traer producto por id
     @GetMapping("/{id}")
     public Producto obtenerProductoPorId(@PathVariable Long id) {
@@ -55,9 +57,9 @@ public class ProductoController {
         productoService.eliminarProducto(id);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/productos/{id}")
     public Producto actualizarProductoParcial(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         return productoService.actualizarParcial(id, updates);
     }
-*/
+
 }

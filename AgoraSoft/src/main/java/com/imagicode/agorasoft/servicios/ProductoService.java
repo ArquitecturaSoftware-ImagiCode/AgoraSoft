@@ -1,47 +1,28 @@
-package com.imagicode.agorasoft.agorasoft.servicios;
+package com.imagicode.agorasoft.servicios;
 
-import com.imagicode.agorasoft.agorasoft.entidades.Producto;
-import com.imagicode.agorasoft.agorasoft.repositorios.ProductoRepositorio;
-import org.springframework.stereotype.Service;
-import java.util.List;
-import org.springframework.util.ReflectionUtils;
-import java.util.Map;
 import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
+
+import com.imagicode.agorasoft.entidades.Producto;
+import com.imagicode.agorasoft.repositorios.ProductoRepository;
 
 @Service
 public class ProductoService {
-    private final ProductoRepositorio productoRepositorio;
+    private final ProductoRepository productoRepositorio;
+
+    public ProductoService(ProductoRepository productoRepositorio) {
+        this.productoRepositorio = productoRepositorio;
+    }
+
     public List<Producto> obtenerProductos() {
         return productoRepositorio.findAll();
     }
 
-    public ProductoService(ProductoRepositorio productoRepositorio) {
-        this.productoRepositorio = productoRepositorio;
-    }
-
-/*
-
-    public Producto obtenerProductoPorId(String id) {
-        return productoRepositorio.findById(id).orElse(null);
-    }
-
-    public Producto guardarProducto(Producto prodcuto) {
-        return productoRepositorio.save(producto);
-    }
-    public List<Producto> obtenerProductos() {
-        return productoRepositorio.findAll();
-    }
-    public void eliminarInventario(String id) {
-        productoRepositorio.deleteById(id);
-    }*/
-/*
-    public ProductoService(ProductoRepositorio productoRepositorio) {
-        this.productoRepositorio = productoRepositorio;
-    }
-
-
-
-    public Producto obtenerProductoPorId(String Id) {
+    public Producto obtenerProductoPorId(Long Id) {
         return productoRepositorio.findById(Id).orElse(null);
     }
 
@@ -49,7 +30,7 @@ public class ProductoService {
         return productoRepositorio.save(producto);
     }
 
-    public Producto actualizarProducto(String id, Producto productoEditado) {
+    public Producto actualizarProducto(Long id, Producto productoEditado) {
         Producto productoExistente = productoRepositorio.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado con id " + id));
         if (productoEditado.getSeccion() != null && !productoEditado.getSeccion().isEmpty()) {
@@ -67,11 +48,11 @@ public class ProductoService {
         return productoRepositorio.save(productoExistente);
     }
 
-    public void eliminarProducto(String Id) {
+    public void eliminarProducto(Long Id) {
         productoRepositorio.deleteById(Id);
     }
 
-    public Producto actualizarParcial(String id, Map<String, Object> updates) {
+    public Producto actualizarParcial(Long id, Map<String, Object> updates) {
         Producto producto = productoRepositorio.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado con id " + id));
 
@@ -85,5 +66,5 @@ public class ProductoService {
 
         return productoRepositorio.save(producto);
     }
-*/
+
 }

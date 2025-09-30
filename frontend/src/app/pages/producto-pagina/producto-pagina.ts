@@ -29,7 +29,7 @@ export class ProductoPagina implements OnInit {
     });
   }
 
-  crearProducto(nombreProducto: string, seccion: string, cantiLibra: string, preciLibra: string): void {
+  crearProducto(nombreProducto: string, seccion: string, cantiLibra: number, preciLibra: number): void {
     const nuevo: Producto = { nombreProducto, seccion, cantiLibra, preciLibra };
     this.productoService.addProducto(nuevo).subscribe({
       next: (res) => {
@@ -39,14 +39,14 @@ export class ProductoPagina implements OnInit {
     });
   }
 
-  eliminarProducto(id: string): void {
-    this.productoService.deleteProducto(id).subscribe({
-      next: () => {
-        this.productos = this.productos.filter((p) => p.id !== id);
-      },
-      error: (err) => console.error('Error eliminando producto', err),
-    });
-  }
+eliminarProducto(id: number): void {  // ✅ number, no string
+  this.productoService.deleteProducto(id).subscribe({
+    next: () => {
+      this.productos = this.productos.filter((p) => p.id !== id);
+    },
+    error: (err) => console.error('Error eliminando producto', err),
+  });
+}
 
   editarProducto(producto: Producto): void {
     this.productoEditando = { ...producto };

@@ -1,4 +1,4 @@
-package com.imagicode.agorasoft.agorasoft.entidades;
+package com.imagicode.agorasoft.entidades;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,67 +8,38 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name = "inventario",schema="inventario")
+@Table(name = "Productos")
 public class Producto {
     @Id
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+
     private String seccion;
     private String nombreProducto;
-    private String cantiLibra;
-    private String preciLibra;
+    private int cantiLibra;
+    private float preciLibra;
 
-    public String getCantiLibra() {
-        return cantiLibra;
-    }
-
-    public void setCantiLibra(String cantiLibra) {
-        this.cantiLibra = cantiLibra;
-    }
-
-    public String getPreciLibra() {
-        return preciLibra;
-    }
-
-    public void setPreciLibra(String preciLibra) {
-        this.preciLibra = preciLibra;
-    }
-
-    public String getNombreProducto() {
-        return nombreProducto;
-    }
-
-    public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
-    }
-
-    public String getSeccion() {
-        return seccion;
-    }
-
-    public void setSeccion(String seccion) {
-        this.seccion = seccion;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    //constructor vacio
     public Producto(){}
-
-
-    public Producto(String id, String preciLibra, String cantiLibra, String nombreProducto, String seccion) {
-        this.id = id;
-        this.preciLibra = preciLibra;
-        this.cantiLibra = cantiLibra;
-        this.nombreProducto = nombreProducto;
+    //contructor con variables
+    public Producto(String seccion, String nombreProducto, int cantiLibra, float preciLibra){
         this.seccion = seccion;
+        this.nombreProducto = nombreProducto;
+        this.cantiLibra = cantiLibra;
+        this.preciLibra = preciLibra;
     }
-
-
+    //getters
+    public long getId(){return Id;}
+    public String getSeccion(){return seccion;}
+    public String getNombreProducto(){return nombreProducto;}
+    public int getCantiLibra(){return cantiLibra;}
+    public float getPreciLibra(){return preciLibra;}
+    //setters
+    public void setId(Long id){this.Id = id;}
+    public void setSeccion(String seccion){this.seccion = seccion;}
+    public void setNombreProducto(String nombreProducto){this.nombreProducto = nombreProducto;}
+    public void setCantiLibra(int cantiLibra){this.cantiLibra = cantiLibra;}
+    public void setPreciLibra(float preciLibra){this.preciLibra = preciLibra;}
 
 
 }
