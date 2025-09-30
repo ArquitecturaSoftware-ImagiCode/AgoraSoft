@@ -1,7 +1,7 @@
 export interface Producto {
-  id: string;
+  id?: number;
   seccion: string;
   nombreProducto: string;
-  cantiLibra: string;
-  preciLibra: string;
+  cantiLibra: number;
+  preciLibra: number;
 }

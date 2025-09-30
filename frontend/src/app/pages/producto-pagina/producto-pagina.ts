@@ -31,7 +31,7 @@ export class ProductoPagina implements OnInit {
 
   crearProducto(nombreProducto: string, seccion: string, cantiLibra: string, preciLibra: string): void {
     const nuevo: Producto = { nombreProducto, seccion, cantiLibra, preciLibra };
-    this.productoService.crearProducto(nuevo).subscribe({
+    this.productoService.addProducto(nuevo).subscribe({
       next: (res) => {
         this.productos.push(res);
       },
@@ -40,7 +40,7 @@ export class ProductoPagina implements OnInit {
   }
 
   eliminarProducto(id: string): void {
-    this.productoService.eliminarProducto(id).subscribe({
+    this.productoService.deleteProducto(id).subscribe({
       next: () => {
         this.productos = this.productos.filter((p) => p.id !== id);
       },
@@ -55,7 +55,7 @@ export class ProductoPagina implements OnInit {
   guardarEdicion(): void {
     if (!this.productoEditando || !this.productoEditando.id) return;
 
-    this.productoService.actualizarProducto(this.productoEditando.id, this.productoEditando).subscribe({
+    this.productoService.updateProducto(this.productoEditando.id, this.productoEditando).subscribe({
       next: () => {
         this.cargarProductos();
         this.productoEditando = null;

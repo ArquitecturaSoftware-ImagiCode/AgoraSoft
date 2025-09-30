@@ -1,5 +1,5 @@
 <h2>Agregar nuevo producto</h2>
-<form (ngSubmit)="crearProducto(nombre.value, seccion.value, cantidad.value, precio.value)">
+<form (ngSubmit)="crearProducto(nombre.value, seccion.value, +cantidad.value, +precio.value)">
   <input type="text" #nombre placeholder="Nombre Producto" required>
   <select #seccion required>
     <option value="Fruta">Fruta</option>
