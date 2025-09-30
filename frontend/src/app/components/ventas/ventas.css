@@ -1,0 +1,177 @@
+/* Layout general */
+.container {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background: #f6f7fb;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #0d2c6c;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 15px;
+  border-radius: 0 20px 20px 0;
+}
+
+.sidebar .brand {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.sidebar .menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebar .menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.sidebar .menu a:hover,
+.sidebar .menu a.active {
+  background: #fff;
+  color: #0d2c6c;
+}
+
+.sidebar .logout {
+  text-align: center;
+}
+
+.sidebar .logout button {
+  border: none;
+  background: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar .logout button:hover {
+  color: #ddd;
+}
+
+/* Main */
+.main {
+  flex: 1;
+  padding: 30px 40px;
+}
+
+.header h1 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 25px;
+}
+
+/* Sales Table */
+.sales table {
+  width: 100%;
+  border-spacing: 0 10px;
+}
+
+.sales thead th {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  padding: 10px 15px;
+}
+
+.sales tbody tr {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
+}
+
+.sales tbody td {
+  padding: 15px;
+  font-size: 14px;
+  color: #444;
+}
+
+.sales tbody tr td:first-child {
+  border-radius: 12px 0 0 12px;
+}
+.sales tbody tr td:last-child {
+  border-radius: 0 12px 12px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.view-btn, .delete-btn {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.view-btn {
+  background: #f1edfd;
+}
+.view-btn:hover {
+  background: #e2d9f9;
+}
+
+.delete-btn {
+  background: #ffe6e6;
+}
+.delete-btn:hover {
+  background: #ffcccc;
+}
+
+/* No sales message */
+.no-sales {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+
+/* Reutilizamos estilos anteriores */
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  flex: 1;
+  outline: none;
+}
+
+.search-bar button {
+  background: #5b3bc4;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-bar button:hover {
+  background: #43279c;
+}

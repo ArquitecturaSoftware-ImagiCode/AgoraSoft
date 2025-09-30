@@ -3,40 +3,44 @@ import { Venta } from '../../models/Venta';
 import { VentaService } from '../../services/venta.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-ventas',
-  imports: [CommonModule,  // Asegúrate de agregarlo aquí
-    HttpClientModule],
+  standalone: true,
+  imports: [CommonModule, HttpClientModule, FormsModule],
   templateUrl: './ventas.html',
-  styleUrl: './ventas.css'
+  styleUrls: ['./ventas.css']
 })
-
-
 export class VentasComponent implements OnInit {
   ventas: Venta[] = [];
-  localId: number = 1; // Por ejemplo, para buscar ventas de un local específico
+  idLocalFiltro: string = '';   // 👈 esta propiedad debe existir
+                                // para [(ngModel)]="idLocalFiltro"
 
-  constructor(private ventaService: VentaService) { }
+  constructor(private ventaService: VentaService) {}
 
   ngOnInit(): void {
-    // Obtener todas las ventas
     this.getVentas();
-
-    // Si quieres obtener ventas de un local específico, puedes usar:
-    // this.getVentasByLocalId(this.localId);
   }
 
-  // Obtener todas las ventas
   getVentas(): void {
-    this.ventaService.getAllVentas().subscribe((data: Venta[]) => {
-      this.ventas = data;
+    this.ventaService.getAllVentas().subscribe({
+      next: (data: Venta[]) => (this.ventas = data),
+      error: (err) => console.error('Error al obtener ventas', err)
     });
   }
 
-  // Obtener ventas por localId
-  getVentasByLocalId(localId: number): void {
-    this.ventaService.getVentasByLocalId(localId).subscribe((data: Venta[]) => {
-      this.ventas = data;
-    });
+  buscarPorLocal(): void {   // 👈 este método debe existir
+    if (this.idLocalFiltro.trim() === '') {
+      this.getVentas();
+    } else {
+      const id = Number(this.idLocalFiltro);
+      if (!isNaN(id)) {
+        this.ventaService.getVentasByLocalId(id).subscribe({
+          next: (data: Venta[]) => (this.ventas = data),
+          error: (err) => console.error('Error al buscar por localId', err)
+        });
+      }
+    }
   }
 }

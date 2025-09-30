@@ -1,26 +1,65 @@
-<div>
-  <h2>Ventas</h2>
+<div class="container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="brand">AgoraSoft</h2>
 
-  <!-- Mostrar todas las ventas -->
-  <table *ngIf="ventas.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Local ID</th>
-        <th>Fecha</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let venta of ventas">
-        <td>{{ venta.id }}</td>
-        <td>{{ venta.localId }}</td>
-        <td>{{ venta.fecha }}</td>
-        <td>{{ venta.total | currency }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <nav class="menu">
+      <a href="#">Usuarios</a>
+      <a href="#">Productos</a>
+      <a href="#" class="active">Ventas</a>
+    </nav>
 
-  <!-- Si no hay ventas -->
-  <p *ngIf="ventas.length === 0">No hay ventas disponibles.</p>
+    <div class="logout">
+      <button>Cerrar Sesión</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Header -->
+    <header class="header">
+      <h1>Ventas</h1>
+    </header>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+      <input 
+        type="text" 
+        [(ngModel)]="idLocalFiltro" 
+        placeholder="Buscar por ID de local" />
+      <button (click)="buscarPorLocal()">Buscar</button>
+    </div>
+
+    <!-- Sales Table -->
+    <section class="sales">
+      <table *ngIf="ventas.length > 0">
+        <thead>
+          <tr>
+            <th>ID Venta</th>
+            <th>ID Local</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let venta of ventas">
+            <td>{{ venta.id }}</td>
+            <td>{{ venta.localId }}</td>
+            <td>{{ venta.fecha }}</td>
+            <td>{{ venta.total | currency }}</td>
+            <td class="actions">
+              <button class="view-btn">👁</button>
+              <button class="delete-btn">🗑</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- No Sales Message -->
+      <p *ngIf="ventas.length === 0" class="no-sales">
+        No hay ventas disponibles.
+      </p>
+    </section>
+  </main>
 </div>
