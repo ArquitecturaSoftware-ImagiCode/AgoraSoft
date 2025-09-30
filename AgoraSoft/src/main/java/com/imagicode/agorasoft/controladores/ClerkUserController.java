@@ -17,11 +17,11 @@ public class ClerkUserController {
 
     @GetMapping("/usuario")
     public Object getUsuario(HttpServletRequest request) {
-        String userId = (String) request.getAttribute("clerkUserId");
+        Long userId = (long) request.getAttribute("clerkUserId");
         if (userId == null) {
             return Map.of("error", "No Clerk userId en el request");
         }
-        Usuario usuario = usuarioService.obtenerUsuarioPorId(userId);
+        Usuario usuario = usuarioService.findById(userId).orElse(null);
         if (usuario != null) {
             return usuario;
         } else {

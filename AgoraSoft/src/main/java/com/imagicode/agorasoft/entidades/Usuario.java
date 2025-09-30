@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Table(schema ="inventario",name = "usuario")
 public class Usuario {
     @Id
-    private String id; // Se debe pasar manualmente
+    private Long id; // Se debe pasar manualmente
 
     private String nombre;
     private String apellido;
@@ -17,7 +17,7 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(String id, String nombre, String apellido, String correo, String rol, String organizacion) {
+    public Usuario(Long id, String nombre, String apellido, String correo, String rol, String organizacion) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -26,8 +26,8 @@ public class Usuario {
         this.organizacion = organizacion;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
