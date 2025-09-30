@@ -49,8 +49,8 @@
             <td>{{ venta.fecha }}</td>
             <td>{{ venta.total | currency }}</td>
             <td class="actions">
-              <button class="view-btn">👁</button>
-              <button class="delete-btn">🗑</button>
+             <button class="view-btn">👁</button>
+              <button class="delete-btn" (click)="eliminarVenta(venta.id)">🗑</button>
             </td>
           </tr>
         </tbody>

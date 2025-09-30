@@ -43,4 +43,22 @@ export class VentasComponent implements OnInit {
       }
     }
   }
+
+  eliminarVenta(id: number): void {
+  if (confirm("¿Estás seguro de que deseas eliminar esta venta?")) {
+    this.ventaService.eliminarVenta(id).subscribe({
+      next: () => {
+        // Elimina la venta de la lista localmente
+        this.ventas = this.ventas.filter(venta => venta.id !== id);
+        alert("Venta eliminada correctamente.");
+      },
+      error: (err) => {
+        console.error("Error al eliminar venta", err);
+        alert("Ocurrió un error al intentar eliminar la venta.");
+      }
+    });
+  }
+}
+
+  
 }

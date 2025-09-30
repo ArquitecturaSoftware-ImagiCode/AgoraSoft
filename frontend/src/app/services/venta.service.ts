@@ -20,4 +20,8 @@ export class VentaService {
   getVentasByLocalId(localId: number): Observable<Venta[]> {
     return this.http.get<Venta[]>(`${this.apiUrl}/local/${localId}`);
   }
+
+  eliminarVenta(id: number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }
