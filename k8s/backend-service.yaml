@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: agorasoft-backend
+  namespace: agorasoft
+spec:
+  selector:
+    app: agorasoft-backend
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
