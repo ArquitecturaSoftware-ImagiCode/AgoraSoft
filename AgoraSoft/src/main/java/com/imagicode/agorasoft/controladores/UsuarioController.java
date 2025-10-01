@@ -40,9 +40,4 @@ public class UsuarioController {
     public void eliminarUsuario(@PathVariable String id) {
         usuarioService.eliminarUsuario(id);
     }
-
-    @PutMapping("/{id}")
-    public Usuario actualizarUsuario(@PathVariable String id, @RequestBody Usuario usuario) {
-        return usuarioService.actualizarUsuario(id, usuario);
-    }
 }
