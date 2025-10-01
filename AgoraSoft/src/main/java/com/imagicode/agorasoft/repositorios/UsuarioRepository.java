@@ -3,5 +3,5 @@
 import com.imagicode.agorasoft.entidades.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, String> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 }

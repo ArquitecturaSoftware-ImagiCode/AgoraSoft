@@ -1,0 +1,140 @@
+<header class="landing__nav">
+  <div class="container">
+    <a class="brand" routerLink="/">
+      <img src="/logo-agorasoft.jpg" alt="Logo AgoraSoft" class="brand__logo" />
+      <span class="brand__name">AgoraSoft</span>
+    </a>
+
+    <nav class="nav">
+      <div class="nav__group">
+        <a class="nav__link" href="#">Productos</a>
+        <a class="nav__link" href="#">Soluciones</a>
+        <a class="nav__link" href="#">Recursos</a>
+        <a class="nav__link" href="#">Precios</a>
+      </div>
+
+      <div class="nav__ctas">
+        <a class="btn btn--ghost" routerLink="/login">Iniciar Sesión</a>
+        <a class="btn btn--primary" routerLink="/register">Prueba AgoraSoft gratis</a>
+      </div>
+    </nav>
+
+    <button class="nav__burger" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main class="landing">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__bg">
+      <div class="hero__grid-stripes"></div>
+      <div class="hero__wave"></div>
+    </div>
+
+    <div class="container hero__content">
+      <div class="hero__copy">
+        <h1 class="hero__title">La plaza de mercado en la palma de tu mano</h1>
+        <p class="hero__subtitle">
+          El software que impulsa la gestión de tu plaza de mercado.
+        </p>
+
+        <div class="hero__ctas">
+          <a class="btn btn--primary btn--lg" routerLink="/register">
+            Prueba AgoraSoft gratis
+          </a>
+          <a class="btn btn--ghost btn--lg" routerLink="/login">
+            Iniciar Sesión
+          </a>
+        </div>
+      </div>
+
+      <div class="hero__media">
+        <!-- Reemplaza por tu imagen -->
+        <img src="/market-hero.jpg" alt="Plaza de mercado" />
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUES DE VALOR -->
+  <section class="features">
+    <div class="container">
+      <div class="features__row">
+        <div class="card card--solid">
+          <h3>Todo en un solo lugar</h3>
+          <p>Administra puestos, pagos, reportes y comunicación desde una única plataforma.</p>
+          <a class="link" href="#">Conocer más</a>
+        </div>
+        <div class="card">
+          <h3>Grandes beneficios</h3>
+          <p>Ahorra tiempo, reduce errores y mejora la experiencia de vendedores y visitantes.</p>
+          <a class="link" href="#">Ver beneficios</a>
+        </div>
+        <div class="card">
+          <h3>Más orden, mejor experiencia</h3>
+          <p>Optimiza la operación diaria y ofrece información clara y en tiempo real.</p>
+          <a class="link" href="#">Cómo funciona</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN DESTACADO -->
+  <section class="split">
+    <div class="container split__grid">
+      <div class="split__media">
+        <img src="/merchant.jpg" alt="Comerciante usando AgoraSoft" />
+      </div>
+      <div class="split__copy">
+        <h2>Un software para todos en la plaza</h2>
+        <p>
+          Diseñado para administraciones, comerciantes y visitantes. Configurable, seguro
+          y listo para crecer contigo.
+        </p>
+        <a class="btn btn--secondary" routerLink="/signin">Empezar gratis</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section class="testimonials">
+    <div class="container">
+      <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+      <div class="testimonials__row">
+        <blockquote class="quote">
+          <p>“AgoraSoft nos ayudó a organizar cobros y reportes. Ganamos claridad y tiempo.”</p>
+          <footer>– Carlos Méndez, Admin. Plaza Central</footer>
+        </blockquote>
+        <blockquote class="quote">
+          <p>“Ahora todo está en un mismo lugar. Los comerciantes lo adoptaron rápido.”</p>
+          <footer>– María Bonilla, Coordinadora Operativa</footer>
+        </blockquote>
+        <blockquote class="quote">
+          <p>“La integración con pagos simplificó muchísimo el día a día.”</p>
+          <footer>– Rafael Herrera, Tesorero</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final">
+    <div class="cta-final__bg"></div>
+    <div class="container cta-final__content">
+      <h2>Prueba AgoraSoft en tu plaza de mercado hoy</h2>
+      <a class="btn btn--primary btn--lg" routerLink="/signin">Comenzar gratis</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__grid">
+      <span>© 2025 AgoraSoft</span>
+      <nav class="footer__links">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="#">Contacto</a>
+      </nav>
+    </div>
+  </footer>
+</main>

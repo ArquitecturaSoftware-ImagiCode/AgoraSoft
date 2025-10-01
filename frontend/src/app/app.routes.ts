@@ -8,10 +8,15 @@ import { ProveedorDashboard } from './pages/proveedor/proveedor-dashboard/provee
 import { OperadorDashboard } from './pages/operador/operador-dashboard/operador-dashboard';
 import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
+import { VentasComponent } from './components/ventas/ventas';
+import { LandingVentasComponent } from './components/landing-ventas/landing-ventas.component';
+
 
 export const routes: Routes = [
   { path: 'register', component: SignUpPage },
   { path: 'login', component: SignInPage },
+  { path: 'ventas', component: VentasComponent  },
+  { path: '', component: LandingVentasComponent  },
   {
     path: 'comercial',
     component: ComercialLayout,

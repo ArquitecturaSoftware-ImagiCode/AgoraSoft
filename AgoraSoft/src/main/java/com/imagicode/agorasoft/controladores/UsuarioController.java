@@ -5,39 +5,40 @@ import com.imagicode.agorasoft.servicios.UsuarioService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UsuarioController {
 
-    private final UsuarioService usuarioService;
+    @Autowired
+    private UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
-
-    // GET: traer todos los usuarios
     @GetMapping
-    public List<Usuario> listarUsuarios() {
-        return usuarioService.obtenerUsuarios();
+    public List<Usuario> getAllUsuarios() {
+        return usuarioService.findAll();
     }
 
-    // GET: traer usuario por id
     @GetMapping("/{id}")
-    public Usuario obtenerUsuarioPorId(@PathVariable String id) {
-        return usuarioService.obtenerUsuarioPorId(id);
+    public Optional<Usuario> getUsuarioById(@PathVariable Long id) {
+        return usuarioService.findById(id);
     }
 
-    // POST: crear usuario
     @PostMapping
-    public Usuario crearUsuario(@RequestBody Usuario usuario) {
-        return usuarioService.crearUsuario(usuario);
+    public Usuario createUsuario(@RequestBody Usuario usuario) {
+        return usuarioService.save(usuario);
     }
 
-    // DELETE: eliminar usuario
+    @PutMapping("/{id}")
+    public Usuario updateUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+        return usuarioService.save(usuario);
+    }
+
     @DeleteMapping("/{id}")
-    public void eliminarUsuario(@PathVariable String id) {
-        usuarioService.eliminarUsuario(id);
+    public void deleteUsuario(@PathVariable Long id) {
+        usuarioService.delete(id);
     }
 }
