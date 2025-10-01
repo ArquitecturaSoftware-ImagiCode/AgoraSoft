@@ -29,7 +29,7 @@ export class OperadorDashboard implements OnInit {
       return;
     }
     try {
-      const response = await fetch(`${environment.apiBaseUrl}/usuario`, {
+      const response = await fetch(`${environment.apiBaseUrl}/usuarios`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${this.token.toString()}`,
