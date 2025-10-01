@@ -91,6 +91,8 @@ export class SignUp {
             rol: clerkUser.unsafeMetadata?.['role'],
             organizacion: clerkUser.unsafeMetadata?.['plaza']
           };
+
+          
           // Enviar al backend
           await fetch(`${environment.apiBaseUrl}/usuarios`, {
             method: 'POST',

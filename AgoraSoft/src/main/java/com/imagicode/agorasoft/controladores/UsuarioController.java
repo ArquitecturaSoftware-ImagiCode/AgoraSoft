@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/usuarios")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -32,8 +31,7 @@ public class UsuarioController {
     // POST: crear usuario
     @PostMapping
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
-        
-
+        System.out.println("Creando usuario: " + usuario);
         return usuarioService.crearUsuario(usuario);
     }
 

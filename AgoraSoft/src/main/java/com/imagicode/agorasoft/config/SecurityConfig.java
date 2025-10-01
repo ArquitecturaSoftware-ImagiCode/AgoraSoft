@@ -20,7 +20,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .anyRequest().permitAll()
             )
-            .cors(cors -> {}); // habilita CORS (usará el bean de abajo)
+            .cors(cors -> {}); // habilita CORS con el bean de abajo
 
         return http.build();
     }
@@ -28,14 +28,19 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("*")); // tu frontend
+
+        // 🔹 Agrega aquí los orígenes de tu frontend
+        config.setAllowedOrigins(List.of(
+            "http://localhost:8085",
+            "http://localhost:4200"
+        ));
+
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(true); // ahora sí válido
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
 }
-

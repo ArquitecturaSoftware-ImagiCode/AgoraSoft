@@ -10,7 +10,7 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/AgoraSoft
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: contrasena
+      SPRING_DATASOURCE_PASSWORD: admin
       JPA_DDL_AUTO: update
       JPA_SHOW_SQL: "true"
 
