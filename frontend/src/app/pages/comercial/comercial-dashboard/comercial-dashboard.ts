@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import axios from 'axios';
 import { CommonModule, JsonPipe } from '@angular/common';
+import {environment} from '../../../../environments/environments';
 
 @Component({
   selector: 'app-comercial-dashboard',
@@ -29,7 +30,7 @@ export class ComercialDashboard implements OnInit {
       return;
     }
     try {
-      const response = await fetch('http://localhost:8080/api/usuario', {
+      const response = await fetch(`${environment.apiBaseUrl}/usuario`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${this.token.toString()}`,

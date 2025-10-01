@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule, JsonPipe } from '@angular/common';
+import {environment} from '../../../../environments/environments';
 
 @Component({
   selector: 'app-operador-dashboard',
@@ -28,7 +29,7 @@ export class OperadorDashboard implements OnInit {
       return;
     }
     try {
-      const response = await fetch('http://localhost:8080/api/usuario', {
+      const response = await fetch(`${environment.apiBaseUrl}/usuario`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${this.token.toString()}`,

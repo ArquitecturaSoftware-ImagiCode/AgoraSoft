@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
-import {environment} from '../../../environments/environments';
+import {environment} from '../../../../environments/environments';
 
 @Component({
   selector: 'app-sign-up',

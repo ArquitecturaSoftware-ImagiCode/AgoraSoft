@@ -51,13 +51,14 @@ public class ClerkAuthFilter implements Filter {
                     headers,
                     AuthenticateRequestOptions
                             .secretKey("sk_test_GNj2mKLiTHeAdLs1kF7RR0vvVZ2dzVGrVgiGIrqsVF")
-                            .authorizedParty("*") // ⚠️ Verifica esto
+                            .authorizedParty("http://localhost:8085/") // ⚠️ Verifica esto
                             .build()
             );
 
             System.out.println("[ClerkAuthFilter] ¿Está autenticado Clerk? " + requestState.isSignedIn());
             System.out.println("[ClerkAuthFilter] Reason: " + requestState.reason());
-            
+
+
             if (!requestState.isSignedIn()) {
                 System.out.println("[ClerkAuthFilter] Token rechazado por Clerk. Reason: " + requestState.reason());
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Clerk token inválido: " + requestState.reason());

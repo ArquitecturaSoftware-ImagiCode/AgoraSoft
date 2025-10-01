@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Clerk } from '@clerk/clerk-js';
-import { environment } from '../environments/environments';
+import { environment } from '../../environments/environments';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +20,7 @@ export class ClerkService {
   }
 
   async signUp(email: string, password: string) {
-    
+
     return this.clerk?.client?.signUp.create({ emailAddress: email, password });
   }
 
@@ -29,7 +29,7 @@ export class ClerkService {
     this.clerk.mountSignUp(container, options);
   }
 
-  
+
 
   unmountSignUp(container: HTMLDivElement): void {
     if (!this.clerk) throw new Error('Clerk no inicializado');
