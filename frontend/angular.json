@@ -20,16 +20,27 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
-                "glob": "**/*",
+                "glob": "*/",
                 "input": "public"
               }
             ],
             "styles": [
               "src/styles.css"
-            ]
+            ],
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
+            }
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -77,7 +88,7 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               {
-                "glob": "**/*",
+                "glob": "*/",
                 "input": "public"
               }
             ],
@@ -88,5 +99,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "26609e09-db5b-4c63-b1e8-c92f5700ac44"
   }
 }

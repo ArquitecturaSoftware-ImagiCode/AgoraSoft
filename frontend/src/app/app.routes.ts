@@ -10,40 +10,40 @@ import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
 
 export const routes: Routes = [
-  { path: 'register', component: SignUpPage },
-  { path: 'login', component: SignInPage },
+  { path: 'api/register', component: SignUpPage },
+  { path: 'api/login', component: SignInPage },
   {
-    path: 'comercial',
+    path: 'api/comercial',
     component: ComercialLayout,
     canActivate: [AuthGuard],
-    data: { role: 'comercial' },
+    data: { role: 'api/comercial' },
     children: [
       {
-        path: 'dashboard',
+        path: 'api/dashboard',
         component: ComercialDashboard,
       },
     ],
   },
   {
-    path: 'proveedor',
+    path: 'api/proveedor',
     component: ProveedorLayout,
     canActivate: [AuthGuard],
-    data: { role: 'proveedor' },
+    data: { role: 'api/proveedor' },
     children: [
       {
-        path: 'dashboard',
+        path: 'api/dashboard',
         component: ProveedorDashboard,
       },
     ],
   },
   {
-    path: 'operador',
+    path: 'api/operador',
     component: OperadorLayout,
     canActivate: [AuthGuard],
-    data: { role: 'operador' },
+    data: { role: 'api/operador' },
     children: [
       {
-        path: 'dashboard',
+        path: 'api/dashboard',
         component: OperadorDashboard,
       },
     ],

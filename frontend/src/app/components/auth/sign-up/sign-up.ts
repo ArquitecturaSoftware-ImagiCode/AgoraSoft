@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
+import {environment} from '../../../environments/environments';
 
 @Component({
   selector: 'app-sign-up',
@@ -91,7 +92,7 @@ export class SignUp {
             organizacion: clerkUser.unsafeMetadata?.['plaza']
           };
           // Enviar al backend
-          await fetch('http://localhost:8080/usuarios', {
+          await fetch(`${environment.apiBaseUrl}/usuarios`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(usuarioBackend)

@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agorasoft-backend
+  namespace: agorasoft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agorasoft-backend
+  template:
+    metadata:
+      labels:
+        app: agorasoft-backend
+    spec:
+      nodeSelector:
+        agorasoft: "true"
+      imagePullSecrets:
+        - name: ghcr-creds
+      containers:
+        - name: backend
+          image: ghcr.io/arquitecturasoftware-imagicode/agorasoft-backend:1.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: agorasoft-config
+                  key: SPRING_PROFILES_ACTIVE
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: agorasoft-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: agorasoft-config
+                  key: DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: agorasoft-config
+                  key: DB_NAME
+            - name: JDBC_PARAMS
+              valueFrom:
+                configMapKeyRef:
+                  name: agorasoft-config
+                  key: JDBC_PARAMS
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: DB_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: DB_PASS
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(JDBC_PARAMS)"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            # periodSeconds y failureThreshold abajo
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
