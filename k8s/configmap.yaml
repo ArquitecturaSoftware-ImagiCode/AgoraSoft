@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agorasoft-config
+  namespace: agorasoft
+data:
+  DB_HOST: "10.43.102.247"
+  DB_PORT: "5432"
+  DB_NAME: "AgoraSoft"
+  JDBC_PARAMS: "ssl=false"
+  SPRING_PROFILES_ACTIVE: "prod"
