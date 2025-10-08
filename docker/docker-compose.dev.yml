@@ -3,14 +3,14 @@ version: "3.9"
 services:
   backend:
     build:
-      context: ../AgoraSoft
+      context: ../backend
       dockerfile: Dockerfile
     container_name: agorasoft-backend
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/AgoraSoft
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_DATASOURCE_PASSWORD: contrasena
       JPA_DDL_AUTO: update
       JPA_SHOW_SQL: "true"
 

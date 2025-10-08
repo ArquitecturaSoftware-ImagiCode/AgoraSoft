@@ -31,8 +31,11 @@ public class SecurityConfig {
 
         // 🔹 Agrega aquí los orígenes de tu frontend
         config.setAllowedOrigins(List.of(
-            "http://localhost:8085",
-            "http://localhost:4200"
+                "http://10.43.103.209",
+                "http://10.43.103.209:80",
+                "http://localhost:8085",
+                "http://localhost:4200",
+                "https://tu-dominio.com"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

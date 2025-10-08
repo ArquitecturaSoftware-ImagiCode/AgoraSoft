@@ -51,7 +51,7 @@ public class ClerkAuthFilter implements Filter {
                     headers,
                     AuthenticateRequestOptions
                             .secretKey("sk_test_GNj2mKLiTHeAdLs1kF7RR0vvVZ2dzVGrVgiGIrqsVF")
-                            .authorizedParty("http://localhost:8085") // ⚠️ Verifica esto
+                            .authorizedParty("http://10.43.103.209") // ⚠️ Verifica esto
                             .build()
             );
 
