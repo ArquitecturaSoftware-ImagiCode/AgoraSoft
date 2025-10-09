@@ -10,7 +10,7 @@ import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
 
 export const routes: Routes = [
-  { path: 'register', component: SignUpPage },
+  { path: 'singup', component: SignUpPage },
   { path: 'login', component: SignInPage },
   {
     path: 'comercial',
