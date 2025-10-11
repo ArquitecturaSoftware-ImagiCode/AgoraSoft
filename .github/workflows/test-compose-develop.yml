@@ -1,0 +1,94 @@
+name: Test Docker Compose (Develop)
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  test-compose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and start services with Docker Compose
+        run: |
+          docker-compose up -d --build
+
+      - name: Wait for services to be ready
+        run: |
+          echo "⏳ Esperando que los servicios estén listos (esto puede tomar ~5 minutos)..."
+          
+          for i in {1..30}; do
+            echo "Esperando... $((i * 10)) segundos transcurridos"
+            sleep 10
+          
+            RUNNING=$(docker-compose ps -q | wc -l)
+            if [ $RUNNING -eq 3 ]; then
+              HEALTHY=$(docker-compose ps | grep -E "agorasoft-(proxy|frontend|backend)" | grep -c "Up")
+              if [ $HEALTHY -eq 3 ]; then
+                echo "✅ Todos los servicios están listos después de $((i * 10)) segundos"
+                break
+              fi
+            fi
+          done
+
+      - name: Check running containers
+        run: |
+          echo "📋 Estado de los contenedores:"
+          docker-compose ps
+          echo ""
+          echo "📝 Logs de los servicios:"
+          docker-compose logs --tail=50
+
+      - name: Verify specific services are running
+        run: |
+          echo "🔍 Verificando servicios específicos..."
+          
+          if docker ps --filter "name=agorasoft-proxy" --filter "status=running" | grep -q agorasoft-proxy; then
+            echo "✅ agorasoft-proxy está corriendo"
+          else
+            echo "❌ agorasoft-proxy NO está corriendo"
+            docker logs agorasoft-proxy
+            exit 1
+          fi
+          
+          if docker ps --filter "name=agorasoft-frontend" --filter "status=running" | grep -q agorasoft-frontend; then
+            echo "✅ agorasoft-frontend está corriendo"
+          else
+            echo "❌ agorasoft-frontend NO está corriendo"
+            docker logs agorasoft-frontend
+            exit 1
+          fi
+          
+          if docker ps --filter "name=agorasoft-backend" --filter "status=running" | grep -q agorasoft-backend; then
+            echo "✅ agorasoft-backend está corriendo"
+          else
+            echo "❌ agorasoft-backend NO está corriendo"
+            docker logs agorasoft-backend
+            exit 1
+          fi
+          
+          echo ""
+          echo "🎉 Todos los servicios están corriendo correctamente"
+
+      - name: Show logs on failure
+        if: failure()
+        run: |
+          echo "❌ El workflow falló. Mostrando logs completos:"
+          docker-compose logs
+
+      - name: Stop and remove containers
+        if: always()
+        run: |
+          echo "🧹 Limpiando contenedores..."
+          docker-compose down -v
