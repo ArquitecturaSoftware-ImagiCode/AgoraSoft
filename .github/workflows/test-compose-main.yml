@@ -11,7 +11,7 @@ on:
 jobs:
   test-compose:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 7
 
     steps:
       - name: Checkout code
@@ -22,7 +22,8 @@ jobs:
 
       - name: Build and start services with Docker Compose
         run: |
-          docker compose up -d --build
+          cd docker
+          docker compose -f docker-compose.dev.yml up -d --build
 
       - name: Wait for services to be ready
         run: |
