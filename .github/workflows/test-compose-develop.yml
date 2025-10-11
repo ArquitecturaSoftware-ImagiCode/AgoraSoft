@@ -11,7 +11,7 @@ on:
 jobs:
   test-compose:
     runs-on: ubuntu-latest
-    timeout-minutes: 7
+    timeout-minutes: 10
 
     steps:
       - name: Checkout code
@@ -22,7 +22,7 @@ jobs:
 
       - name: Build and start services with Docker Compose
         run: |
-          docker-compose up -d --build
+          docker compose up -d --build
 
       - name: Wait for services to be ready
         run: |
@@ -32,9 +32,9 @@ jobs:
             echo "Esperando... $((i * 10)) segundos transcurridos"
             sleep 10
           
-            RUNNING=$(docker-compose ps -q | wc -l)
+            RUNNING=$(docker compose ps -q | wc -l)
             if [ $RUNNING -eq 3 ]; then
-              HEALTHY=$(docker-compose ps | grep -E "agorasoft-(proxy|frontend|backend)" | grep -c "Up")
+              HEALTHY=$(docker compose ps | grep -E "agorasoft-(proxy|frontend|backend)" | grep -c "Up")
               if [ $HEALTHY -eq 3 ]; then
                 echo "✅ Todos los servicios están listos después de $((i * 10)) segundos"
                 break
@@ -45,10 +45,10 @@ jobs:
       - name: Check running containers
         run: |
           echo "📋 Estado de los contenedores:"
-          docker-compose ps
+          docker compose ps
           echo ""
           echo "📝 Logs de los servicios:"
-          docker-compose logs --tail=50
+          docker compose logs --tail=50
 
       - name: Verify specific services are running
         run: |
@@ -85,10 +85,10 @@ jobs:
         if: failure()
         run: |
           echo "❌ El workflow falló. Mostrando logs completos:"
-          docker-compose logs
+          docker compose logs
 
       - name: Stop and remove containers
         if: always()
         run: |
           echo "🧹 Limpiando contenedores..."
-          docker-compose down -v
+          docker compose down -v
