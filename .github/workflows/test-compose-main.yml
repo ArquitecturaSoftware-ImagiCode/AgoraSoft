@@ -27,16 +27,17 @@ jobs:
 
       - name: Wait for services to be ready
         run: |
-          echo "⏳ Esperando que los servicios estén listos (esto puede tomar ~5 minutos)..."
+          echo "⏳ Esperando que los servicios estén listos (esto puede tomar ~8 minutos)..."
           
-          for i in {1..30}; do
+          cd docker
+          for i in {1..48}; do
             echo "Esperando... $((i * 10)) segundos transcurridos"
             sleep 10
           
-            RUNNING=$(docker compose ps -q | wc -l)
-            if [ $RUNNING -eq 3 ]; then
-              HEALTHY=$(docker compose ps | grep -E "agorasoft-(proxy|frontend|backend)" | grep -c "Up")
-              if [ $HEALTHY -eq 3 ]; then
+            RUNNING=$(docker compose -f docker-compose.dev.yml ps -q | wc -l)
+            if [ $RUNNING -eq 4 ]; then
+              HEALTHY=$(docker compose -f docker-compose.dev.yml ps | grep -E "agorasoft-(database|backend|frontend|proxy)" | grep -c "Up")
+              if [ $HEALTHY -eq 4 ]; then
                 echo "✅ Todos los servicios están listos después de $((i * 10)) segundos"
                 break
               fi
@@ -46,31 +47,26 @@ jobs:
       - name: Check running containers
         run: |
           echo "📋 Estado de los contenedores:"
-          docker compose ps
+          cd docker
+          docker compose -f docker-compose.dev.yml ps
           echo ""
           echo "📝 Logs de los servicios:"
-          docker compose logs --tail=50
+          docker compose -f docker-compose.dev.yml logs --tail=50
 
       - name: Verify specific services are running
         run: |
           echo "🔍 Verificando servicios específicos..."
           
-          if docker ps --filter "name=agorasoft-proxy" --filter "status=running" | grep -q agorasoft-proxy; then
-            echo "✅ agorasoft-proxy está corriendo"
+          # Verificar database
+          if docker ps --filter "name=agorasoft-database" --filter "status=running" | grep -q agorasoft-database; then
+            echo "✅ agorasoft-database está corriendo"
           else
-            echo "❌ agorasoft-proxy NO está corriendo"
-            docker logs agorasoft-proxy
+            echo "❌ agorasoft-database NO está corriendo"
+            docker logs agorasoft-database
             exit 1
           fi
           
-          if docker ps --filter "name=agorasoft-frontend" --filter "status=running" | grep -q agorasoft-frontend; then
-            echo "✅ agorasoft-frontend está corriendo"
-          else
-            echo "❌ agorasoft-frontend NO está corriendo"
-            docker logs agorasoft-frontend
-            exit 1
-          fi
-          
+          # Verificar backend
           if docker ps --filter "name=agorasoft-backend" --filter "status=running" | grep -q agorasoft-backend; then
             echo "✅ agorasoft-backend está corriendo"
           else
@@ -79,17 +75,52 @@ jobs:
             exit 1
           fi
           
+          # Verificar frontend
+          if docker ps --filter "name=agorasoft-frontend" --filter "status=running" | grep -q agorasoft-frontend; then
+            echo "✅ agorasoft-frontend está corriendo"
+          else
+            echo "❌ agorasoft-frontend NO está corriendo"
+            docker logs agorasoft-frontend
+            exit 1
+          fi
+          
+          # Verificar proxy
+          if docker ps --filter "name=agorasoft-proxy" --filter "status=running" | grep -q agorasoft-proxy; then
+            echo "✅ agorasoft-proxy está corriendo"
+          else
+            echo "❌ agorasoft-proxy NO está corriendo"
+            docker logs agorasoft-proxy
+            exit 1
+          fi
+          
           echo ""
-          echo "🎉 Todos los servicios están corriendo correctamente"
+          echo "🎉 Todos los servicios (database, backend, frontend, proxy) están corriendo correctamente"
+
+      - name: Verify database health
+        run: |
+          echo "🏥 Verificando salud de la base de datos..."
+          
+          # Verificar que PostgreSQL responde
+          docker exec agorasoft-database pg_isready -U postgres -d AgoraSoft
+          
+          echo ""
+          echo "📊 Verificando que el schema inventario existe..."
+          docker exec agorasoft-database psql -U postgres -d AgoraSoft -c "\dn inventario"
+          
+          echo ""
+          echo "📋 Verificando que la tabla usuario existe..."
+          docker exec agorasoft-database psql -U postgres -d AgoraSoft -c "\dt inventario.usuario"
 
       - name: Show logs on failure
         if: failure()
         run: |
           echo "❌ El workflow falló. Mostrando logs completos:"
-          docker compose logs
+          cd docker
+          docker compose -f docker-compose.dev.yml logs
 
       - name: Stop and remove containers
         if: always()
         run: |
           echo "🧹 Limpiando contenedores..."
-          docker compose down -v
+          cd docker
+          docker compose -f docker-compose.dev.yml down -v
