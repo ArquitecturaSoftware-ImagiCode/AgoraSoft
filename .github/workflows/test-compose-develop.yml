@@ -119,7 +119,7 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Get latest version and increment
-        if: github.event_name == 'push'
+        if: github.event_name == 'pull_request'
         id: version
         run: |
           echo "🔍 Buscando última versión en GHCR..."
@@ -143,7 +143,7 @@ jobs:
           echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: List Docker images (debug)
-        if: github.event_name == 'push'
+        if: github.event_name == 'pull_request'
         run: |
           echo "🔍 Listando todas las imágenes Docker disponibles:"
           docker images
@@ -155,7 +155,7 @@ jobs:
           docker images | grep -i frontend || echo "No se encontraron imágenes de frontend"
 
       - name: Tag and push images to GHCR
-        if: github.event_name == 'push'
+        if: github.event_name == 'pull_request'
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
