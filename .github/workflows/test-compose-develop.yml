@@ -111,7 +111,7 @@ jobs:
           docker exec agorasoft-database psql -U postgres -d AgoraSoft -c "\dt inventario.usuario"
 
       - name: Login to GitHub Container Registry
-        if: github.event_name == 'push'
+        if: github.event_name == 'pull_request'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
