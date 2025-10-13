@@ -35,6 +35,7 @@ public class SecurityConfig {
                 "http://10.43.103.209:80",
                 "http://localhost:8085",
                 "http://localhost:4200",
+                "http://10.43.102.15",
                 "https://tu-dominio.com"
         ));
 
