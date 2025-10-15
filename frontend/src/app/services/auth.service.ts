@@ -17,6 +17,7 @@ export class AuthService {
   private async initializeClerk() {
     await this.clerk.load(
       {
+        frontendApi: 'clerk.agorasoft.ngrok.app',
         domain: 'agorasoft.ngrok.app'
       }
     );
