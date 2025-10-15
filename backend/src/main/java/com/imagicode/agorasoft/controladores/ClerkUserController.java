@@ -15,7 +15,7 @@ public class ClerkUserController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/usuario")
+    @PostMapping("/usuario")
     public Object getUsuario(HttpServletRequest request) {
         String userId = (String) request.getAttribute("clerkUserId");
         if (userId == null) {
