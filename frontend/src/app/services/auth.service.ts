@@ -15,7 +15,11 @@ export class AuthService {
 
   /** Inicializa Clerk y escucha cambios de sesión */
   private async initializeClerk() {
-    await this.clerk.load();
+    await this.clerk.load(
+      {
+        domain: 'agorasoft.ngrok.app'
+      }
+    );
     this.signedIn$.next(this.clerk.isSignedIn);
 
     this.clerk.addListener(({ user }) => {
