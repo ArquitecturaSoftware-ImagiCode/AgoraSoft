@@ -36,6 +36,7 @@ public class SecurityConfig {
                 "http://localhost:8085",
                 "http://localhost:4200",
                 "http://10.43.102.15",
+                "https://1cb8343a3c8d.ngrok-free.app",
                 "https://tu-dominio.com"
         ));
 
