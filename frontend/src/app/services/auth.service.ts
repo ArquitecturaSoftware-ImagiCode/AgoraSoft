@@ -8,7 +8,7 @@ export class AuthService {
   private signedIn$ = new BehaviorSubject<boolean>(false);
 
   constructor() {
-    this.clerk = new Clerk('pk_test_YWNjZXB0ZWQtdGVybWl0ZS05MS5jbGVyay5hY2NvdW50cy5kZXYk');
+    this.clerk = new Clerk('pk_live_Y2xlcmsuMWNiODM0M2EzYzhkLm5ncm9rLWZyZWUuYXBwJA');
 
     this.initializeClerk();
   }
