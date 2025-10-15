@@ -8,19 +8,14 @@ export class AuthService {
   private signedIn$ = new BehaviorSubject<boolean>(false);
 
   constructor() {
-    this.clerk = new Clerk('pk_live_Y2xlcmsuYWdvcmFzb2Z0Lm5ncm9rLmFwcCQ');
+    this.clerk = new Clerk('pk_test_YWNjZXB0ZWQtdGVybWl0ZS05MS5jbGVyay5hY2NvdW50cy5kZXYk');
 
     this.initializeClerk();
   }
 
   /** Inicializa Clerk y escucha cambios de sesión */
   private async initializeClerk() {
-    await this.clerk.load(
-      {
-        frontendApi: 'clerk.agorasoft.ngrok.app',
-        domain: 'agorasoft.ngrok.app'
-      }
-    );
+    await this.clerk.load();
     this.signedIn$.next(this.clerk.isSignedIn);
 
     this.clerk.addListener(({ user }) => {
