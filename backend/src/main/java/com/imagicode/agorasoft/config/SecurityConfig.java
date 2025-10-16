@@ -39,6 +39,7 @@ public class SecurityConfig {
                 "https://agorasoft.ngrok.app",
                 "http://localhost:30080",
                 "http://127.0.0.1:4040",
+                "https://agorasoft-backend.ngrok.app",
                 "https://tu-dominio.com"
         ));
 
