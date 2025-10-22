@@ -12,10 +12,15 @@ jobs:
   test-compose:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -57,7 +62,6 @@ jobs:
         run: |
           echo "🔍 Verificando servicios específicos..."
           
-          # Verificar database
           if docker ps --filter "name=agorasoft-database" --filter "status=running" | grep -q agorasoft-database; then
             echo "✅ agorasoft-database está corriendo"
           else
@@ -66,7 +70,6 @@ jobs:
             exit 1
           fi
           
-          # Verificar backend
           if docker ps --filter "name=agorasoft-backend" --filter "status=running" | grep -q agorasoft-backend; then
             echo "✅ agorasoft-backend está corriendo"
           else
@@ -75,7 +78,6 @@ jobs:
             exit 1
           fi
           
-          # Verificar frontend
           if docker ps --filter "name=agorasoft-frontend" --filter "status=running" | grep -q agorasoft-frontend; then
             echo "✅ agorasoft-frontend está corriendo"
           else
@@ -84,7 +86,6 @@ jobs:
             exit 1
           fi
           
-          # Verificar proxy
           if docker ps --filter "name=agorasoft-proxy" --filter "status=running" | grep -q agorasoft-proxy; then
             echo "✅ agorasoft-proxy está corriendo"
           else
@@ -99,8 +100,6 @@ jobs:
       - name: Verify database health
         run: |
           echo "🏥 Verificando salud de la base de datos..."
-          
-          # Verificar que PostgreSQL responde
           docker exec agorasoft-database pg_isready -U postgres -d AgoraSoft
           
           echo ""
@@ -110,6 +109,98 @@ jobs:
           echo ""
           echo "📋 Verificando que la tabla usuario existe..."
           docker exec agorasoft-database psql -U postgres -d AgoraSoft -c "\dt inventario.usuario"
+
+      - name: Login to GitHub Container Registry
+        if: github.event_name == 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Get latest version and increment
+        if: github.event_name == 'pull_request'
+        id: version
+        run: |
+          echo "🔍 Buscando última versión en GHCR..."
+          
+          LAST_VERSION=$(curl -s -H "Authorization: Bearer ${{ secrets.GHCR_TOKEN }}" \
+            "https://api.github.com/orgs/arquitecturasoftware-imagicode/packages/container/agorasoft-backend/versions" \
+            | jq -r '.[0].metadata.container.tags[] | select(test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))' \
+            | sort -V | tail -n1)
+          
+          if [ -z "$LAST_VERSION" ]; then
+            echo "⚠️  No se encontró versión previa, comenzando en 1.0.0"
+            NEW_VERSION="1.0.0"
+          else
+            echo "📌 Última versión encontrada: $LAST_VERSION"
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$LAST_VERSION"
+            PATCH=$((PATCH + 1))
+            NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          fi
+          
+          echo "🆕 Nueva versión: $NEW_VERSION"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: List Docker images (debug)
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "🔍 Listando todas las imágenes Docker disponibles:"
+          docker images
+          echo ""
+          echo "🔍 Buscando imágenes de backend:"
+          docker images | grep -i backend || echo "No se encontraron imágenes de backend"
+          echo ""
+          echo "🔍 Buscando imágenes de frontend:"
+          docker images | grep -i frontend || echo "No se encontraron imágenes de frontend"
+
+      - name: Tag and push images to GHCR
+        if: github.event_name == 'pull_request'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          echo "🏷️  Etiquetando imágenes con versión: $VERSION"
+          
+          # Buscar las imágenes construidas (búsqueda más flexible)
+          BACKEND_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep -i backend | grep -v ghcr.io | head -n1)
+          FRONTEND_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep -i frontend | grep -v ghcr.io | head -n1)
+          
+          if [ -z "$BACKEND_IMAGE" ]; then
+            echo "❌ No se encontró imagen de backend"
+            exit 1
+          fi
+          
+          if [ -z "$FRONTEND_IMAGE" ]; then
+            echo "❌ No se encontró imagen de frontend"
+            exit 1
+          fi
+          
+          echo "✅ Backend image encontrada: $BACKEND_IMAGE"
+          echo "✅ Frontend image encontrada: $FRONTEND_IMAGE"
+          
+          # Tag backend
+          docker tag $BACKEND_IMAGE ghcr.io/arquitecturasoftware-imagicode/agorasoft-backend:$VERSION
+          docker tag $BACKEND_IMAGE ghcr.io/arquitecturasoftware-imagicode/agorasoft-backend:latest
+          
+          # Tag frontend
+          docker tag $FRONTEND_IMAGE ghcr.io/arquitecturasoftware-imagicode/agorasoft-frontend:$VERSION
+          docker tag $FRONTEND_IMAGE ghcr.io/arquitecturasoftware-imagicode/agorasoft-frontend:latest
+          
+          echo "📤 Subiendo imágenes a GHCR..."
+          
+          # Push backend
+          docker push ghcr.io/arquitecturasoftware-imagicode/agorasoft-backend:$VERSION
+          docker push ghcr.io/arquitecturasoftware-imagicode/agorasoft-backend:latest
+          
+          # Push frontend
+          docker push ghcr.io/arquitecturasoftware-imagicode/agorasoft-frontend:$VERSION
+          docker push ghcr.io/arquitecturasoftware-imagicode/agorasoft-frontend:latest
+          
+          echo "✅ Imágenes subidas exitosamente:"
+          echo "   - ghcr.io/arquitecturasoftware-imagicode/agorasoft-backend:$VERSION"
+          echo "   - ghcr.io/arquitecturasoftware-imagicode/agorasoft-backend:latest"
+          echo "   - ghcr.io/arquitecturasoftware-imagicode/agorasoft-frontend:$VERSION"
+          echo "   - ghcr.io/arquitecturasoftware-imagicode/agorasoft-frontend:latest"
 
       - name: Show logs on failure
         if: failure()
