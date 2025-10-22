@@ -17,79 +17,49 @@ export class InventarioComponent implements OnInit {
   itemsInventario: ItemInventario[] = [];
   editando: ItemInventario | null = null;
   nuevaCantidad: number = 0;
-  usuarioId: number = 0;
+  inventarioId: string = "i_op-001"; // ID de inventario del operador
 
   constructor(
     private itemInventarioService: ItemInventarioService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   async ngOnInit() {
-    await this.obtenerUsuarioId();
     this.cargarInventario();
-  }
-
-  async obtenerUsuarioId() {
-    // Usuario fijo para pruebas
-    this.usuarioId = 200;
   }
 
   async cargarInventario() {
     try {
-      const inventario = await this.itemInventarioService.obtenerInventarioPorUsuario(this.usuarioId);
-      this.inventario = inventario;
-      console.log('Inventario obtenido del backend:', inventario);
-      await this.cargarItemsInventario();
+      // Llamar directamente al endpoint correcto para obtener items del inventario
+      const items = await this.itemInventarioService.listarPorInventario(this.inventarioId);
+      this.itemsInventario = items;
+      console.log('Items de inventario cargados del backend:', items);
     } catch (error) {
-      console.error('Error al obtener inventario del usuario:', error);
-      // Si no existe inventario, crear uno nuevo
-      await this.crearInventarioNuevo();
-    }
-  }
-
-  private async crearInventarioNuevo() {
-    const nuevoInventario = {
-      usuarioId: this.usuarioId,
-      items: []
-    };
-
-    try {
-      const inventario = await this.itemInventarioService.crearInventario(nuevoInventario);
-      this.inventario = inventario;
-      console.log('Nuevo inventario creado:', inventario);
-      await this.cargarItemsInventario();
-    } catch (error) {
-      console.error('Error al crear nuevo inventario:', error);
-      // Como fallback, usar inventario ficticio
-      this.inventario = {
-        id: 7, // ID del inventario que creamos
-        usuarioId: this.usuarioId,
-        items: []
-      };
-      await this.cargarItemsInventario();
-    }
-  }
-
-  async cargarItemsInventario() {
-    if (this.inventario?.id) {
-      try {
-        const items = await this.itemInventarioService.listarPorInventario(this.inventario.id);
-        this.itemsInventario = items;
-        console.log('Items de inventario cargados:', items);
-      } catch (error) {
-        console.error('Error al cargar items del inventario:', error);
-        // Mantener array vacío si hay error
-        this.itemsInventario = [];
-      }
-    } else {
-      // Si no hay inventario, mantener array vacío
+      console.error('Error al cargar items del inventario:', error);
       this.itemsInventario = [];
     }
   }
 
+
   comprarAProveedores() {
-    // Placeholder - por ahora solo muestra un mensaje
-    alert('Funcionalidad de compra a proveedores próximamente disponible');
+    // Por ahora muestra un mensaje más informativo
+    const mensaje = `
+      🛒 Funcionalidad de Compra a Proveedores
+    
+      Esta funcionalidad te permitirá:
+      • Ver catálogo de productos disponibles
+      • Agregar productos al inventario
+      • Realizar pedidos a proveedores
+      • Gestionar compras y entregas
+    
+      ¡Próximamente disponible!
+    `;
+    alert(mensaje);
+
+    // Aquí podrías implementar:
+    // - Navegación a una página de compras
+    // - Apertura de un modal con productos
+    // - Integración con el backend para mostrar proveedores
   }
 
   editarCantidad(item: ItemInventario) {
@@ -98,14 +68,14 @@ export class InventarioComponent implements OnInit {
   }
 
   async guardarCantidad() {
-    if (this.editando && this.inventario?.id) {
+    if (this.editando) {
       try {
-        await this.itemInventarioService.actualizarCantidad(
-          this.inventario.id,
-          this.editando.producto.id!,
+        const itemActualizado = await this.itemInventarioService.actualizarCantidad(
+          this.inventarioId,
+          this.editando.id!,
           this.nuevaCantidad
         );
-        await this.cargarItemsInventario();
+        await this.cargarInventario();
         this.cancelar();
       } catch (error) {
         console.error('Error al actualizar cantidad:', error);
@@ -118,7 +88,7 @@ export class InventarioComponent implements OnInit {
       if (item.id) {
         try {
           await this.itemInventarioService.eliminar(item.id);
-          await this.cargarItemsInventario();
+          await this.cargarInventario(); // Recargar la lista completa
         } catch (error) {
           console.error('Error al eliminar item:', error);
         }
@@ -145,8 +115,8 @@ export class InventarioComponent implements OnInit {
   async verificarConexion() {
     console.log('Verificando conexión con backend...');
     try {
-      const inventario = await this.itemInventarioService.obtenerInventarioPorUsuario(this.usuarioId);
-      console.log('Conexión exitosa:', inventario);
+      const items = await this.itemInventarioService.listarPorInventario(this.inventarioId);
+      console.log('Conexión exitosa:', items);
     } catch (error) {
       console.error('Error de conexión:', error);
       alert('Error de conexión con el servidor. Verifica que el backend esté corriendo en el puerto correcto.');

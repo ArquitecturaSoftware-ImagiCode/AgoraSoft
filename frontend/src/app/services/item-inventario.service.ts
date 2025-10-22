@@ -17,7 +17,7 @@ export class ItemInventarioService {
     return await this.http.get<ItemInventario[]>(this.baseUrl).toPromise() as ItemInventario[];
   }
 
-  async listarPorInventario(inventarioId: number): Promise<ItemInventario[]> {
+  async listarPorInventario(inventarioId: string): Promise<ItemInventario[]> {
     return await this.http.get<ItemInventario[]>(`${this.baseUrl}/inventario/${inventarioId}`).toPromise() as ItemInventario[];
   }
 
@@ -47,14 +47,11 @@ export class ItemInventarioService {
     }).toPromise() as ItemInventario;
   }
 
-  async actualizarCantidad(inventarioId: number, productoId: number, nuevaCantidad: number): Promise<ItemInventario> {
-    return await this.http.put<ItemInventario>(`${this.baseUrl}/cantidad`, null, {
-      params: {
-        inventarioId: inventarioId.toString(),
-        productoId: productoId.toString(),
-        nuevaCantidad: nuevaCantidad.toString()
-      }
-    }).toPromise() as ItemInventario;
+  async actualizarCantidad(inventarioId: string, itemId: number, cantidad: number): Promise<ItemInventario> {
+    return await this.http.put<ItemInventario>(
+      `${this.baseUrl}/inventario/${inventarioId}/item/${itemId}`, 
+      { cantidad: cantidad }
+    ).toPromise() as ItemInventario;
   }
 
   // Métodos para Inventario

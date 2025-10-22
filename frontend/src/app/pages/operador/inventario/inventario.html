@@ -4,10 +4,10 @@
     <div class="d-flex align-items-center">
       <!-- Debug info temporal -->
       <small class="text-muted me-3">
-        Usuario: {{ usuarioId }} | Inventario: {{ inventario?.id || 'No encontrado' }}
+        Inventario ID: {{ inventarioId }} | Items: {{ itemsInventario.length }}
       </small>
-      <button class="btn btn-primary" (click)="comprarAProveedores()">
-        <i class="fas fa-truck"></i> Comprar a Proveedores
+      <button class="btn btn-success btn-lg shadow-sm" (click)="comprarAProveedores()">
+        <i class="fas fa-shopping-cart me-2"></i> Comprar a Proveedores
       </button>
     </div>
   </div>
@@ -58,9 +58,11 @@
               >
               <button class="btn btn-sm btn-success me-1" (click)="guardarCantidad()">
                 <i class="fas fa-check"></i>
+                Guardar
               </button>
               <button class="btn btn-sm btn-secondary" (click)="cancelar()">
                 <i class="fas fa-times"></i>
+                Cancelar
               </button>
             </div>
           </td>
@@ -76,7 +78,7 @@
                 <i class="fas fa-edit"></i> Editar
               </button>
               <button 
-                class="btn btn-sm btn-danger" 
+                class="btn btn-sm btn-danger hover-scale" 
                 (click)="eliminar(item)"
                 title="Eliminar del inventario"
               >
