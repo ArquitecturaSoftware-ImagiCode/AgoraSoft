@@ -4,7 +4,7 @@ package com.imagicode.agorasoft.entidades;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "usuario", schema="inventario")
+@Table(name = "usuarios", schema="inventario")
 public class Usuario {
     @Id
     private String id; // Se debe pasar manualmente

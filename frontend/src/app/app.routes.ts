@@ -6,6 +6,7 @@ import { AuthGuard } from './services/auth.guard';
 import { ComercialDashboard } from './pages/comercial/comercial-dashboard/comercial-dashboard';
 import { ProveedorDashboard } from './pages/proveedor/proveedor-dashboard/proveedor-dashboard';
 import { OperadorDashboard } from './pages/operador/operador-dashboard/operador-dashboard';
+import { InventarioComponent } from './pages/operador/inventario/inventario';
 import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
 
@@ -45,6 +46,10 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: OperadorDashboard,
+      },
+      {
+        path: 'inventario',
+        component: InventarioComponent,
       },
     ],
   },
