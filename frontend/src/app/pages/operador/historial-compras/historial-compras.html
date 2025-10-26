@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>
+      <i class="fas fa-history me-2"></i>
+      Historial de Compras
+    </h2>
+    <span class="badge bg-info">{{ compras.length }} compras</span>
+  </div>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-muted">Cargando historial de compras...</p>
+  </div>
+
+  <!-- Lista de compras -->
+  <div *ngIf="!cargando && compras.length > 0" class="row">
+    <div class="col-12">
+      <div class="card mb-3" *ngFor="let compra of compras">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="mb-0">Compra #{{ compra.id }}</h6>
+            <small class="text-muted">{{ formatearFecha(compra.fechaCompra) }}</small>
+          </div>
+          <div class="text-end">
+            <span class="badge bg-success fs-6">${{ compra.total | number:'1.2-2' }}</span>
+            <br>
+            <small class="text-muted">Proveedor: {{ compra.proveedor.nombre }}</small>
+          </div>
+        </div>
+        <div class="card-body">
+          <h6 class="mb-3">Productos comprados:</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-striped">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th class="text-center">Cantidad</th>
+                  <th class="text-end">Precio Unitario</th>
+                  <th class="text-end">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let detalle of compra.detalles">
+                  <td>{{ detalle.producto.nombre }}</td>
+                  <td class="text-center">{{ detalle.cantidad }}</td>
+                  <td class="text-end">${{ detalle.precioUnitario | number:'1.2-2' }}</td>
+                  <td class="fw-bold text-end">${{ detalle.subtotal | number:'1.2-2' }}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3" class="text-end fw-bold">Total:</td>
+                  <td class="fw-bold text-end text-success">${{ compra.total | number:'1.2-2' }}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje si no hay compras -->
+  <div *ngIf="!cargando && compras.length === 0" class="text-center py-5">
+    <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+    <h4 class="text-muted">No tienes compras registradas</h4>
+    <p class="text-muted">Realiza tu primera compra para ver el historial aquí</p>
+    <a routerLink="/operador/compras" class="btn btn-primary mt-3">
+      <i class="fas fa-cart-plus me-2"></i>Ir a Compras
+    </a>
+  </div>
+</div>

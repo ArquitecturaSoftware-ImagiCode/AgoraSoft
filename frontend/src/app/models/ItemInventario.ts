@@ -6,8 +6,8 @@ export interface ItemInventario {
 }
 
 export interface Inventario {
-  id?: number;
-  usuarioId: number;
+  id?: string;
+  usuarioId: string;
   items?: ItemInventario[];
 }
 

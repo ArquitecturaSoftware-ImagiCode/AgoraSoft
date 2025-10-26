@@ -31,6 +31,17 @@ public class InventarioService {
         return inventarioRepository.save(inventario);
     }
     
+    /**
+     * Obtiene o crea el inventario de un usuario.
+     * Si el inventario no existe, lo crea automáticamente.
+     */
+    public Inventario obtenerOCrearInventario(String usuarioId) {
+        List<Inventario> inventarios = inventarioRepository.findByUsuarioId(usuarioId);
+        if (inventarios.isEmpty()) {
+            return guardar(usuarioId);
+        }
+        return inventarios.get(0);
+    }
 
     public void eliminar(String id) {
         inventarioRepository.deleteById(id);

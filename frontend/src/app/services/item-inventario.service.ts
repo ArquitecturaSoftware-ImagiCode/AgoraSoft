@@ -37,10 +37,10 @@ export class ItemInventarioService {
     await this.http.delete<void>(`${this.baseUrl}/${id}`).toPromise();
   }
 
-  async agregarProducto(inventarioId: number, productoId: number, cantidad: number): Promise<ItemInventario> {
+  async agregarProducto(inventarioId: string, productoId: number, cantidad: number): Promise<ItemInventario> {
     return await this.http.post<ItemInventario>(`${this.baseUrl}/agregar`, null, {
       params: {
-        inventarioId: inventarioId.toString(),
+        inventarioId: inventarioId,
         productoId: productoId.toString(),
         cantidad: cantidad.toString()
       }
@@ -57,6 +57,10 @@ export class ItemInventarioService {
   // Métodos para Inventario
   async obtenerInventarioPorUsuario(usuarioId: number): Promise<Inventario> {
     return await this.http.get<Inventario>(`${this.inventarioUrl}/usuario/${usuarioId}`).toPromise() as Inventario;
+  }
+
+  async obtenerOCrearInventario(usuarioId: string): Promise<Inventario> {
+    return await this.http.get<Inventario>(`${this.inventarioUrl}/obtener-o-crear/${usuarioId}`).toPromise() as Inventario;
   }
 
   async crearInventario(inventario: Inventario): Promise<Inventario> {

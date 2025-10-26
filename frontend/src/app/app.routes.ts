@@ -7,6 +7,8 @@ import { ComercialDashboard } from './pages/comercial/comercial-dashboard/comerc
 import { ProveedorDashboard } from './pages/proveedor/proveedor-dashboard/proveedor-dashboard';
 import { OperadorDashboard } from './pages/operador/operador-dashboard/operador-dashboard';
 import { InventarioComponent } from './pages/operador/inventario/inventario';
+import { ComprasComponent } from './pages/operador/compras/compras';
+import { HistorialComprasComponent } from './pages/operador/historial-compras/historial-compras';
 import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
 
@@ -50,6 +52,14 @@ export const routes: Routes = [
       {
         path: 'inventario',
         component: InventarioComponent,
+      },
+      {
+        path: 'compras',
+        component: ComprasComponent,
+      },
+      {
+        path: 'historial-compras',
+        component: HistorialComprasComponent,
       },
     ],
   },

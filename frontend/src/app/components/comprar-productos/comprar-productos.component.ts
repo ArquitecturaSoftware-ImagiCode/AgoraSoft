@@ -2,7 +2,9 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductoService, Producto } from '../../services/producto';
-import { ItemInventarioService } from '../../services/item-inventario.service';
+import { CompraService } from '../../services/compra.service';
+import { AuthService } from '../../services/auth.service';
+import { Compra } from '../../models/Compra';
 
 export interface ProductoCompra {
   producto: Producto;
@@ -67,7 +69,6 @@ export interface ProductoCompra {
                     <p class="mb-2">
                       <span class="badge bg-secondary me-2">{{ item.producto.categoria || 'Sin categoría' }}</span>
                       <span class="text-success fw-bold">{{ item.producto.precio | currency }}</span>
-                      <span *ngIf="item.producto.unidadMedida" class="text-muted">/ {{ item.producto.unidadMedida }}</span>
                     </p>
                     
                     <div *ngIf="item.seleccionado" class="d-flex align-items-center">
@@ -144,7 +145,8 @@ export class ComprarProductosComponent implements OnInit {
 
   constructor(
     private productoService: ProductoService,
-    private itemInventarioService: ItemInventarioService
+    private compraService: CompraService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -203,7 +205,7 @@ export class ComprarProductosComponent implements OnInit {
     }, 0);
   }
 
-  procesarCompra() {
+  async procesarCompra() {
     const productosSeleccionados = this.getProductosSeleccionados();
     
     if (productosSeleccionados.length === 0) {
@@ -211,25 +213,86 @@ export class ComprarProductosComponent implements OnInit {
       return;
     }
 
-    // Simular compra exitosa - sin llamadas al backend por ahora
-    const totalProductos = productosSeleccionados.length;
-    const totalCosto = this.getTotalCompra();
-    
-    // Mostrar resumen de la compra
-    let mensaje = `¡Compra realizada exitosamente!\n\n`;
-    mensaje += `Productos seleccionados: ${totalProductos}\n`;
-    mensaje += `Total: ${totalCosto.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}\n\n`;
-    mensaje += `Productos:\n`;
-    
-    productosSeleccionados.forEach(item => {
-      mensaje += `• ${item.producto.nombre} - ${item.cantidad} unidades\n`;
-    });
-    
-    alert(mensaje);
-    
-    // Emitir evento de compra realizada
-    this.compraRealizada.emit();
-    this.cerrar();
+    try {
+      this.cargando = true;
+
+      // Obtener el ID del usuario logueado
+      const usuarioId = await this.authService.getUserId();
+      if (!usuarioId) {
+        alert('Error: No se pudo obtener el usuario logueado.');
+        this.cargando = false;
+        return;
+      }
+
+      // Agrupar productos por proveedor
+      const productosPorProveedor = new Map<number, typeof productosSeleccionados>();
+      productosSeleccionados.forEach(item => {
+        const proveedorId = item.producto.proveedor.id;
+        if (!productosPorProveedor.has(proveedorId)) {
+          productosPorProveedor.set(proveedorId, []);
+        }
+        productosPorProveedor.get(proveedorId)!.push(item);
+      });
+
+      // Crear una compra por cada proveedor
+      const comprasCreadas: Compra[] = [];
+      for (const [proveedorId, items] of productosPorProveedor) {
+        const proveedor = items[0].producto.proveedor;
+        const total = items.reduce((sum, item) => sum + (item.producto.precio * item.cantidad), 0);
+
+        const compra: Compra = {
+          usuario: { id: usuarioId },
+          proveedor: {
+            id: proveedorId,
+            nombre: proveedor.nombre || 'Proveedor'
+          },
+          fechaCompra: new Date().toISOString(),
+          total: total,
+          detalles: items.map(item => ({
+            producto: {
+              id: item.producto.id!,
+              nombre: item.producto.nombre,
+              precio: item.producto.precio
+            },
+            cantidad: item.cantidad,
+            precioUnitario: item.producto.precio,
+            subtotal: item.producto.precio * item.cantidad
+          }))
+        };
+
+        // Registrar la compra (el backend actualiza el inventario automáticamente)
+        const compraGuardada = await this.compraService.crearCompra(compra);
+        comprasCreadas.push(compraGuardada);
+        console.log('Compra registrada:', compraGuardada);
+      }
+
+      this.cargando = false;
+
+      // Mostrar resumen de la compra
+      const totalProductos = productosSeleccionados.length;
+      const totalCosto = this.getTotalCompra();
+      
+      let mensaje = `¡Compra realizada exitosamente!\n\n`;
+      mensaje += `Se ${comprasCreadas.length === 1 ? 'creó 1 orden' : `crearon ${comprasCreadas.length} órdenes`} de compra\n`;
+      mensaje += `Productos agregados al inventario: ${totalProductos}\n`;
+      mensaje += `Total: ${totalCosto.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}\n\n`;
+      mensaje += `Productos:\n`;
+      
+      productosSeleccionados.forEach(item => {
+        mensaje += `• ${item.producto.nombre} - ${item.cantidad} unidades\n`;
+      });
+      
+      alert(mensaje);
+      
+      // Emitir evento de compra realizada
+      this.compraRealizada.emit();
+      this.cerrar();
+
+    } catch (error) {
+      this.cargando = false;
+      console.error('Error al procesar la compra:', error);
+      alert('Error al procesar la compra. Por favor, intenta de nuevo.');
+    }
   }
 
   cerrar() {

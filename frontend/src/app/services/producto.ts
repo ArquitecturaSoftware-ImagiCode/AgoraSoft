@@ -7,9 +7,13 @@ export interface Producto {
   nombre: string;
   descripcion?: string;
   precio: number;
-  unidadMedida?: string;
   categoria?: string;
   imagenUrl?: string;
+  proveedor: {
+    id: number;
+    nombre?: string;
+    email?: string;
+  };
 }
 
 @Injectable({ providedIn: 'root' })
@@ -22,11 +26,15 @@ export class ProductoService {
     return await this.http.get<Producto[]>(this.baseUrl).toPromise() as Producto[];
   }
 
+  async obtener(id: number): Promise<Producto> {
+    return await this.http.get<Producto>(`${this.baseUrl}/${id}`).toPromise() as Producto;
+  }
+
   async crear(p: Producto): Promise<Producto> {
     return await this.http.post<Producto>(this.baseUrl, p).toPromise() as Producto;
   }
 
-  async editar(id: number, p: Producto): Promise<Producto> {
+  async actualizar(id: number, p: Producto): Promise<Producto> {
     return await this.http.put<Producto>(`${this.baseUrl}/${id}`, p).toPromise() as Producto;
   }
 
