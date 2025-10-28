@@ -17,7 +17,8 @@ export class InventarioComponent implements OnInit {
   itemsInventario: ItemInventario[] = [];
   editando: ItemInventario | null = null;
   nuevaCantidad: number = 0;
-  inventarioId: string = "i_op-001"; // ID de inventario del operador
+  inventarioId: string = "";
+  cargando: boolean = false;
 
   constructor(
     private itemInventarioService: ItemInventarioService,
@@ -25,12 +26,38 @@ export class InventarioComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.cargarInventario();
+    await this.inicializarInventario();
+  }
+
+  async inicializarInventario() {
+    try {
+      this.cargando = true;
+      
+      // Obtener el ID del usuario logueado
+      const usuarioId = await this.authService.getUserId();
+      if (!usuarioId) {
+        console.error('No se pudo obtener el ID del usuario');
+        alert('Error: No se pudo identificar el usuario. Por favor, inicia sesión nuevamente.');
+        this.cargando = false;
+        return;
+      }
+
+      // Construir el ID del inventario usando el patrón i_{usuarioId}
+      this.inventarioId = `i_${usuarioId}`;
+      console.log('ID del inventario:', this.inventarioId);
+
+      // Cargar los items del inventario
+      await this.cargarInventario();
+      
+      this.cargando = false;
+    } catch (error) {
+      console.error('Error al inicializar inventario:', error);
+      this.cargando = false;
+    }
   }
 
   async cargarInventario() {
     try {
-      // Llamar directamente al endpoint correcto para obtener items del inventario
       const items = await this.itemInventarioService.listarPorInventario(this.inventarioId);
       this.itemsInventario = items;
       console.log('Items de inventario cargados del backend:', items);
@@ -42,24 +69,16 @@ export class InventarioComponent implements OnInit {
 
 
   comprarAProveedores() {
-    // Por ahora muestra un mensaje más informativo
-    const mensaje = `
-      🛒 Funcionalidad de Compra a Proveedores
+    const mensaje = `Funcionalidad de Compra a Proveedores
     
-      Esta funcionalidad te permitirá:
-      • Ver catálogo de productos disponibles
-      • Agregar productos al inventario
-      • Realizar pedidos a proveedores
-      • Gestionar compras y entregas
+Esta funcionalidad te permitirá:
+- Ver catálogo de productos disponibles
+- Agregar productos al inventario
+- Realizar pedidos a proveedores
+- Gestionar compras y entregas
     
-      ¡Próximamente disponible!
-    `;
+Próximamente disponible!`;
     alert(mensaje);
-
-    // Aquí podrías implementar:
-    // - Navegación a una página de compras
-    // - Apertura de un modal con productos
-    // - Integración con el backend para mostrar proveedores
   }
 
   editarCantidad(item: ItemInventario) {

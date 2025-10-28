@@ -38,6 +38,14 @@ public class ItemInventarioController {
         return itemInventarioService.actualizarCantidad(inventarioId, itemId, cantidad);
     }
 
+    @PostMapping("/agregar")
+    public ItemInventario agregarProducto(
+            @RequestParam String inventarioId,
+            @RequestParam Long productoId,
+            @RequestParam Integer cantidad) {
+        return itemInventarioService.agregarProducto(inventarioId, productoId, cantidad);
+    }
+
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         itemInventarioService.eliminar(id);

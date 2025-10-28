@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { BriefcaseBusiness, ChartBarIcon, CircleDollarSign, Key, LayoutDashboard, LogOut, LucideAngularModule, NotebookText, User, Users } from 'lucide-angular';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-operador-layout',
-  imports: [RouterOutlet, LucideAngularModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, LucideAngularModule],
   templateUrl: './operador-layout.html',
   styleUrl: './operador-layout.css'
 })

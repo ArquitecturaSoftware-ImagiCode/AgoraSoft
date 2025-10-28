@@ -103,6 +103,12 @@ export class AuthService {
     return user?.unsafeMetadata?.['role'] as string | undefined;
   }
 
+  /** Obtener ID del usuario actual */
+  async getUserId(): Promise<string | undefined> {
+    const user = await this.clerk.user;
+    return user?.id;
+  }
+
   /** Obtener instancia de Clerk (por si la necesitas) */
   getClerkInstance(): Clerk {
     return this.clerk;

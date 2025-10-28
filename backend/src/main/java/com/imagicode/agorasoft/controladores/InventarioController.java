@@ -23,6 +23,11 @@ public class InventarioController {
         return inventarioService.listarPorUsuario(usuarioId);
     }
 
+    @GetMapping("/obtener-o-crear/{usuarioId}")
+    public Inventario obtenerOCrearInventario(@PathVariable String usuarioId) {
+        return inventarioService.obtenerOCrearInventario(usuarioId);
+    }
+
     @PostMapping
     public Inventario crearInventario(@RequestBody Map<String, String> body) {
         String usuarioId = body.get("usuarioId");

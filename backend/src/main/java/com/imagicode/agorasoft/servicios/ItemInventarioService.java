@@ -1,6 +1,7 @@
 package com.imagicode.agorasoft.servicios;
 
 import com.imagicode.agorasoft.entidades.ItemInventario;
+import com.imagicode.agorasoft.entidades.Producto;
 import com.imagicode.agorasoft.repositorios.ItemInventarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,26 @@ public class ItemInventarioService {
         }
         item.setCantidad(nuevaCantidad);
         return itemInventarioRepository.save(item);
+    }
+
+    public ItemInventario agregarProducto(String inventarioId, Long productoId, Integer cantidad) {
+        // Verificar si ya existe el item en el inventario
+        List<ItemInventario> itemsExistentes = itemInventarioRepository.findByInventarioIdAndProducto_Id(inventarioId, productoId);
+        
+        if (!itemsExistentes.isEmpty()) {
+            // Actualizar cantidad existente
+            ItemInventario itemExistente = itemsExistentes.get(0);
+            itemExistente.setCantidad(itemExistente.getCantidad() + cantidad);
+            return itemInventarioRepository.save(itemExistente);
+        } else {
+            // Crear nuevo item en inventario
+            ItemInventario nuevoItem = ItemInventario.builder()
+                    .inventarioId(inventarioId)
+                    .producto(Producto.builder().id(productoId).build())
+                    .cantidad(cantidad)
+                    .build();
+            return itemInventarioRepository.save(nuevoItem);
+        }
     }
 
     public void eliminar(Long id) {
