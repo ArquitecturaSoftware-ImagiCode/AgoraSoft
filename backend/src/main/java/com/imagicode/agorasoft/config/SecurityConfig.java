@@ -40,7 +40,8 @@ public class SecurityConfig {
                 "http://localhost:30080",
                 "http://127.0.0.1:4040",
                 "https://tu-dominio.com",
-                "https://agorasoftlanding.ngrok.app"
+                "https://agorasoftlanding.ngrok.app",
+                "https://agorasoftqa.ngrok.app"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
