@@ -51,7 +51,7 @@ public class ClerkAuthFilter implements Filter {
                     headers,
                     AuthenticateRequestOptions
                             .secretKey("sk_test_GNj2mKLiTHeAdLs1kF7RR0vvVZ2dzVGrVgiGIrqsVF")
-                            .authorizedParties(Arrays.asList("http://10.43.103.209", "http://localhost:8085", "http://127.0.0.1", "http://10.43.102.15","https://agorasoft.ngrok.app","http://localhost:30080","http://127.0.0.1:4040"))
+                            .authorizedParties(Arrays.asList("http://10.43.103.209", "http://localhost:8085", "http://127.0.0.1", "http://10.43.102.15","https://agorasoft.ngrok.app","http://localhost:30080","http://127.0.0.1:4040","https://agorasoftlanding.ngrok.app"))
                             .build()
             );
 
