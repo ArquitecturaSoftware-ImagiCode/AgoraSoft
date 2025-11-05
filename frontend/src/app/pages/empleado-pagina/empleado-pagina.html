@@ -94,7 +94,14 @@
       <input [(ngModel)]="empleadoEditando.correo" name="editCorreo" readonly />
 
       <label>Rol:</label>
-      <input [(ngModel)]="empleadoEditando.rol" name="editRol" required />
+      <select [(ngModel)]="nuevoEmpleado.rol" name="rol" required>
+        <option value = "" disabled selected>Selecciona el Rol del empleado</option>
+        <option value = "SUPER_ADMIN">SUPER_ADMIN</option>
+        <option value = "ADMIN">ADMIN</option>
+        <option value = "COMERCIAL">COMERCIAL</option>
+        <option value = "OPERADOR">OPERADOR</option>
+        <option value = "PROVEDOR">PROVEDOR</option>
+      </select>
 
       <label>Activo:</label>
       <select [(ngModel)]="empleadoEditando.activo" name="editActivo">
