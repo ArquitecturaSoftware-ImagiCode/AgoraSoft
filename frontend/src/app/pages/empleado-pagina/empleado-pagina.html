@@ -1,0 +1,111 @@
+<div class="lista-container">
+  <h2>Lista de Empleados</h2>
+
+  <!-- ✅ Formulario para crear empleado -->
+  <div class="crear-form">
+    <h3>Crear Nuevo Empleado</h3>
+    <form
+      #empleadoForm="ngForm"
+      (ngSubmit)="crearEmpleado(
+        nuevoEmpleado.nombre!,
+        nuevoEmpleado.apellido!,
+        nuevoEmpleado.correo!,
+        nuevoEmpleado.rol!
+      )"
+    >
+      <label>Nombre:</label>
+      <input [(ngModel)]="nuevoEmpleado.nombre" name="nombre" required />
+
+      <label>Apellido:</label>
+      <input [(ngModel)]="nuevoEmpleado.apellido" name="apellido" required />
+
+      <label>Correo:</label>
+      <input
+        [(ngModel)]="nuevoEmpleado.correo"
+        name="correo"
+        required
+        type="email"
+      />
+
+      <label>Rol:</label>
+      <select [(ngModel)]="nuevoEmpleado.rol" name="rol" required>
+        <option value = "" disabled selected>Selecciona el Rol del empleado</option>
+        <option value = "SUPER_ADMIN">SUPER_ADMIN</option>
+        <option value = "ADMIN">ADMIN</option>
+        <option value = "COMERCIAL">COMERCIAL</option>
+        <option value = "OPERADOR">OPERADOR</option>
+        <option value = "PROVEDOR">PROVEDOR</option>
+      </select>
+        
+
+      <div class="acciones">
+        <button type="submit" [disabled]="empleadoForm.invalid">Crear</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Estado de carga -->
+  <div *ngIf="cargando">Cargando empleados...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <!-- Tabla de empleados -->
+  <table *ngIf="!cargando && empleados.length > 0">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Correo</th>
+        <th>Rol</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of empleados">
+        <td>{{ e.nombre }}</td>
+        <td>{{ e.apellido }}</td>
+        <td>{{ e.correo }}</td>
+        <td>{{ e.rol }}</td>
+        <td>{{ e.activo ? 'Sí' : 'No' }}</td>
+        <td>
+          <button (click)="editarEmpleado(e)">Editar</button>
+          <button (click)="eliminarEmpleado(e.id!)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && empleados.length === 0">
+    No hay empleados registrados.
+  </div>
+
+  <!-- Formulario de edición -->
+  <div *ngIf="empleadoEditando" class="editar-form">
+    <h3>Editar Empleado</h3>
+
+    <form (ngSubmit)="guardarEdicion()">
+      <label>Nombre:</label>
+      <input [(ngModel)]="empleadoEditando.nombre" name="editNombre" required />
+
+      <label>Apellido:</label>
+      <input [(ngModel)]="empleadoEditando.apellido" name="editApellido" required />
+
+      <label>Correo:</label>
+      <input [(ngModel)]="empleadoEditando.correo" name="editCorreo" readonly />
+
+      <label>Rol:</label>
+      <input [(ngModel)]="empleadoEditando.rol" name="editRol" required />
+
+      <label>Activo:</label>
+      <select [(ngModel)]="empleadoEditando.activo" name="editActivo">
+        <option [value]="true">Sí</option>
+        <option [value]="false">No</option>
+      </select>
+
+      <div class="acciones">
+        <button type="submit">Guardar</button>
+        <button type="button" (click)="cancelarEdicion()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
