@@ -11,6 +11,10 @@ import { ComprasComponent } from './pages/operador/compras/compras';
 import { HistorialComprasComponent } from './pages/operador/historial-compras/historial-compras';
 import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
+import { ProvClientes } from './pages/proveedor/prov-clientes/prov-clientes';
+import { ProvVentas } from './pages/proveedor/prov-ventas/prov-ventas';
+import { ProvProductos } from './pages/proveedor/prov-productos/prov-productos';
+
 
 export const routes: Routes = [
   { path: 'register', component: SignUpPage },
@@ -28,16 +32,16 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'proveedor',
-    component: ProveedorLayout,
-    canActivate: [AuthGuard],
-    data: { role: 'proveedor' },
-    children: [
-      {
-        path: 'dashboard',
-        component: ProveedorDashboard,
-      },
-    ],
+  path: 'proveedor',
+  component: ProveedorLayout,
+  canActivate: [AuthGuard],
+  data: { role: 'proveedor' },
+  children: [
+    { path: 'dashboard', component: ProveedorDashboard },
+    { path: 'productos', component: ProvProductos },
+    { path: 'clientes', component: ProvClientes },
+    { path: 'venta', component: ProvVentas },
+  ],
   },
   {
     path: 'operador',
