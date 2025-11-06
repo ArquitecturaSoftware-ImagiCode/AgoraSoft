@@ -3,16 +3,27 @@ package com.imagicode.agorasoft.config;
 import com.clerk.backend_api.helpers.security.AuthenticateRequest;
 import com.clerk.backend_api.helpers.security.models.AuthenticateRequestOptions;
 import com.clerk.backend_api.helpers.security.models.RequestState;
+import com.imagicode.agorasoft.servicios.RevokedPlazaService;
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
-
+import com.imagicode.agorasoft.repositorios.UsuarioRepository;
+import com.imagicode.agorasoft.entidades.Usuario;
 import java.io.IOException;
 import java.util.*;
 
 @Component
 public class ClerkAuthFilter implements Filter {
+
+    private final RevokedPlazaService revokedPlazaService;
+    private final UsuarioRepository usuarioRepo;
+
+    public ClerkAuthFilter(RevokedPlazaService revokedPlazaService, UsuarioRepository usuarioRepo) {
+        this.revokedPlazaService = revokedPlazaService;
+        this.usuarioRepo = usuarioRepo;
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -35,7 +46,7 @@ public class ClerkAuthFilter implements Filter {
 
         String token = authHeader.substring(7);
         System.out.println("[ClerkAuthFilter] Token length: " + token.length());
-        
+
         // 🔹 Extraer headers para Clerk
         Map<String, List<String>> headers = new HashMap<>();
         Enumeration<String> headerNames = httpRequest.getHeaderNames();
@@ -51,16 +62,19 @@ public class ClerkAuthFilter implements Filter {
                     headers,
                     AuthenticateRequestOptions
                             .secretKey("sk_test_GNj2mKLiTHeAdLs1kF7RR0vvVZ2dzVGrVgiGIrqsVF")
-                            .authorizedParties(Arrays.asList("http://10.43.103.209", "http://localhost:8085", "http://127.0.0.1", "http://10.43.102.15","https://agorasoft.ngrok.app","http://localhost:30080","http://127.0.0.1:4040","https://agorasoftlanding.ngrok.app"))
-                            .build()
-            );
+                            .authorizedParties(Arrays.asList("http://10.43.103.209", "http://localhost:8085",
+                                    "http://127.0.0.1", "http://10.43.102.15", "https://agorasoft.ngrok.app",
+                                    "http://localhost:30080", "http://127.0.0.1:4040",
+                                    "https://agorasoftlanding.ngrok.app"))
+                            .build());
 
             System.out.println("[ClerkAuthFilter] ¿Está autenticado Clerk? " + requestState.isSignedIn());
             System.out.println("[ClerkAuthFilter] Reason: " + requestState.reason());
-            
+
             if (!requestState.isSignedIn()) {
                 System.out.println("[ClerkAuthFilter] Token rechazado por Clerk. Reason: " + requestState.reason());
-                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Clerk token inválido: " + requestState.reason());
+                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                        "Clerk token inválido: " + requestState.reason());
                 return;
             }
 
@@ -72,10 +86,51 @@ public class ClerkAuthFilter implements Filter {
             System.out.println("[ClerkAuthFilter] Usuario autenticado: " + userId);
             System.out.println("[ClerkAuthFilter] Claims keys: " + claims.keySet());
 
+            // 🔹 Comprobación de plaza revocada: si la plaza asociada al usuario está
+            // revocada,
+            // respondemos 403 y no continuamos con la petición.
+            try {
+                if (userId != null) {
+                    Usuario usuario = usuarioRepo.findById(userId).orElse(null);
+                    if (usuario != null) {
+                        // La entidad Usuario en este proyecto puede no tener un método getPlaza().
+                        // Para mantener compatibilidad con distintos modelos, usamos reflexión:
+                        try {
+                            java.lang.reflect.Method getPlaza = usuario.getClass().getMethod("getPlaza");
+                            Object plaza = getPlaza.invoke(usuario);
+                            if (plaza != null) {
+                                java.lang.reflect.Method getId = plaza.getClass().getMethod("getId");
+                                Object idObj = getId.invoke(plaza);
+                                Long plazaId = null;
+                                if (idObj instanceof Long)
+                                    plazaId = (Long) idObj;
+                                else if (idObj instanceof Number)
+                                    plazaId = ((Number) idObj).longValue();
+                                if (plazaId != null && revokedPlazaService.isPlazaRevoked(plazaId)) {
+                                    System.out
+                                            .println("[ClerkAuthFilter] Acceso denegado: plaza revocada id=" + plazaId);
+                                    httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN,
+                                            "Plaza suspendida. Acceso revocado.");
+                                    return;
+                                }
+                            }
+                        } catch (NoSuchMethodException nsme) {
+                            // Usuario no tiene plaza; omitimos el check.
+                            System.out.println(
+                                    "[ClerkAuthFilter] Usuario no tiene método getPlaza(); omitiendo comprobación de plaza revocada.");
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                // No bloqueamos la petición por error en la verificación; solo logueamos.
+                System.out.println("[ClerkAuthFilter] Error comprobando plaza revocada: " + ex.getMessage());
+            }
+
         } catch (Exception e) {
             System.out.println("[ClerkAuthFilter] ERROR validando token Clerk: " + e.getMessage());
             e.printStackTrace();
-            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error validando token Clerk: " + e.getMessage());
+            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                    "Error validando token Clerk: " + e.getMessage());
             return;
         }
 
