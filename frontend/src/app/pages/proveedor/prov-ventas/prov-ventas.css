@@ -1,0 +1,44 @@
+
+.ventas-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.catalogo {
+  flex: 3;
+}
+.seleccion {
+  flex: 1;
+  max-width: 400px;
+}
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1rem;
+}
+.producto-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.producto-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.producto-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(40,167,69,0.1);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 8px;
+  color: #28a745;
+  font-size: 20px;
+}
