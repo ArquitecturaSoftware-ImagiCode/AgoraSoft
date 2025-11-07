@@ -9,6 +9,8 @@ import { OperadorDashboard } from './pages/operador/operador-dashboard/operador-
 import { InventarioComponent } from './pages/operador/inventario/inventario';
 import { ComprasComponent } from './pages/operador/compras/compras';
 import { HistorialComprasComponent } from './pages/operador/historial-compras/historial-compras';
+import { VentasComponent } from './pages/operador/ventas/ventas';
+import { HistorialVentasComponent } from './pages/operador/historial-ventas/historial-ventas';
 import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
 
@@ -60,6 +62,14 @@ export const routes: Routes = [
       {
         path: 'historial-compras',
         component: HistorialComprasComponent,
+      },
+      {
+        path: 'ventas',
+        component: VentasComponent,
+      },
+      {
+        path: 'historial-ventas',
+        component: HistorialVentasComponent,
       },
     ],
   },

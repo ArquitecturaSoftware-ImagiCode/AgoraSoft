@@ -62,4 +62,55 @@ public class ItemInventarioService {
     public void eliminar(Long id) {
         itemInventarioRepository.deleteById(id);
     }
+
+    /**
+     * Resta cantidad de un producto del inventario (para ventas).
+     * Valida que haya stock suficiente antes de restar.
+     * 
+     * @param inventarioId ID del inventario
+     * @param productoId ID del producto
+     * @param cantidad Cantidad a restar
+     * @return ItemInventario actualizado
+     * @throws RuntimeException si no hay stock suficiente o el producto no existe en el inventario
+     */
+    public ItemInventario restarProducto(String inventarioId, Long productoId, Integer cantidad) {
+        // Verificar si existe el item en el inventario
+        List<ItemInventario> itemsExistentes = itemInventarioRepository.findByInventarioIdAndProducto_Id(inventarioId, productoId);
+        
+        if (itemsExistentes.isEmpty()) {
+            throw new RuntimeException("El producto no existe en el inventario");
+        }
+        
+        ItemInventario itemExistente = itemsExistentes.get(0);
+        int cantidadActual = itemExistente.getCantidad();
+        
+        // Validar stock suficiente
+        if (cantidadActual < cantidad) {
+            throw new RuntimeException(
+                String.format("Stock insuficiente. Disponible: %d, Solicitado: %d", 
+                    cantidadActual, cantidad)
+            );
+        }
+        
+        // Restar la cantidad
+        int nuevaCantidad = cantidadActual - cantidad;
+        itemExistente.setCantidad(nuevaCantidad);
+        
+        return itemInventarioRepository.save(itemExistente);
+    }
+
+    /**
+     * Obtiene la cantidad disponible de un producto en el inventario.
+     * 
+     * @param inventarioId ID del inventario
+     * @param productoId ID del producto
+     * @return Cantidad disponible (0 si no existe)
+     */
+    public Integer obtenerStockDisponible(String inventarioId, Long productoId) {
+        List<ItemInventario> items = itemInventarioRepository.findByInventarioIdAndProducto_Id(inventarioId, productoId);
+        if (items.isEmpty()) {
+            return 0;
+        }
+        return items.get(0).getCantidad();
+    }
 }
