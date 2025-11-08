@@ -92,7 +92,7 @@ public class ProductoController {
             producto.setPrecio(dto.getPrecio());
             producto.setCategoria(dto.getCategoria());
             producto.setImagenUrl(dto.getImagenUrl());
-            producto.setUsuarioProveedorId(usuario.getId());
+            producto.setUsuarioProveedor(usuario);
 
             Producto nuevoProducto = productoService.guardar(producto);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevoProducto);
@@ -119,7 +119,7 @@ public class ProductoController {
             Producto existente = productoService.obtener(id);
 
             // Verificar que el producto pertenece al usuario proveedor
-            if (!existente.getUsuarioProveedorId().equals(usuario.getId())) {
+            if (!existente.getUsuarioProveedor().getId().equals(usuario.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("No autorizado para modificar este producto");
             }
@@ -153,7 +153,7 @@ public class ProductoController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario no encontrado");
 
             Producto producto = productoService.obtener(id);
-            if (!producto.getUsuarioProveedorId().equals(usuario.getId())) {
+            if (!producto.getUsuarioProveedor().getId().equals(usuario.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("No autorizado para eliminar este producto");
             }
@@ -181,7 +181,7 @@ public class ProductoController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario no encontrado");
 
             Producto producto = productoService.obtener(id);
-            if (!producto.getUsuarioProveedorId().equals(usuario.getId())) {
+            if (!producto.getUsuarioProveedor().getId().equals(usuario.getId())) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("No autorizado para modificar este producto");
             }

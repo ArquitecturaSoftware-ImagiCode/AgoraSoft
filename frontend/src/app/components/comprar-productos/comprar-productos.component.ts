@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProductoService, Producto } from '../../services/producto';
+import { ProductoService } from '../../services/producto';
 import { CompraService } from '../../services/compra.service';
 import { AuthService } from '../../services/auth.service';
 import { Compra } from '../../models/Compra';
+import { Producto } from '../../models/ItemInventario';
 
 export interface ProductoCompra {
   producto: Producto;
@@ -206,6 +207,10 @@ export class ComprarProductosComponent implements OnInit {
   }
 
   async procesarCompra() {
+    console.log("hola")
+  }
+  /*
+  async procesarCompra() {
     const productosSeleccionados = this.getProductosSeleccionados();
     
     if (productosSeleccionados.length === 0) {
@@ -294,7 +299,7 @@ export class ComprarProductosComponent implements OnInit {
       alert('Error al procesar la compra. Por favor, intenta de nuevo.');
     }
   }
-
+*/
   cerrar() {
     this.filtroBusqueda = '';
     this.productos = [];

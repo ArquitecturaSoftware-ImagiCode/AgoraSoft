@@ -30,7 +30,7 @@ public class ProductoService {
         if (producto.getPrecio() == null || producto.getPrecio() <= 0) {
             throw new RuntimeException("El precio debe ser mayor a 0");
         }
-        if (producto.getUsuarioProveedorId() == null) {
+        if (producto.getUsuarioProveedor() == null) {
             throw new RuntimeException("El producto debe tener un usuario proveedor asignado");
         }
 
@@ -55,8 +55,8 @@ public class ProductoService {
         if (producto.getImagenUrl() != null) {
             productoExistente.setImagenUrl(producto.getImagenUrl());
         }
-        if (producto.getUsuarioProveedorId() != null) {
-            productoExistente.setUsuarioProveedorId(producto.getUsuarioProveedorId());
+        if (producto.getUsuarioProveedor() != null) {
+            productoExistente.setUsuarioProveedor(producto.getUsuarioProveedor());
         }
 
         return productoRepository.save(productoExistente);

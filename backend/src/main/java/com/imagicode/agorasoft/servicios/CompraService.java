@@ -13,27 +13,32 @@ public class CompraService {
 
     private final CompraRepository compraRepository;
     private final ProductoRepository productoRepository;
-    private final ProveedorRepository proveedorRepository;
     private final ItemInventarioService itemInventarioService;
+    private final UsuarioRepository usuarioRepository;
 
     public CompraService(CompraRepository compraRepository,
             ProductoRepository productoRepository,
-            ProveedorRepository proveedorRepository,
+            UsuarioRepository usuarioRepository,
             ItemInventarioService itemInventarioService) {
+        this.usuarioRepository= usuarioRepository;
         this.compraRepository = compraRepository;
         this.productoRepository = productoRepository;
-        this.proveedorRepository = proveedorRepository;
         this.itemInventarioService = itemInventarioService;
     }
 
     @Transactional
     public Compra registrarCompra(Compra compra) {
         compra.setFechaCompra(LocalDateTime.now());
+        
+        // Validar que el usuario seleccionado sea un proveedor
+        Usuario proveedor = usuarioRepository.findById(compra.getProveedor().getId())
+                .orElseThrow(() -> new RuntimeException("Usuario proveedor no encontrado"));
 
-        // Vincular proveedor desde la BD
-        compra.setProveedor(
-                proveedorRepository.findById(compra.getProveedor().getId())
-                        .orElseThrow(() -> new RuntimeException("Proveedor no encontrado")));
+        if (!"PROVEEDOR".equalsIgnoreCase(proveedor.getRol())) {
+            throw new RuntimeException("El usuario seleccionado no tiene rol de proveedor");
+        }
+
+        compra.setProveedor(proveedor);
 
         // Asignar detalles
         compra.getDetalles().forEach(detalle -> {
