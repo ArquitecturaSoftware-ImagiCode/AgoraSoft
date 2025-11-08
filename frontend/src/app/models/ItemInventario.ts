@@ -16,7 +16,7 @@ export interface Producto {
   nombre: string;
   descripcion?: string;
   precio: number;
-  unidadMedida?: string;
   categoria?: string;
   imagenUrl?: string;
+  usuarioProveedorId?: string;
 }

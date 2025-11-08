@@ -7,7 +7,10 @@
     <!-- Título + icono -->
     <div class="flex items-center gap-3">
       <div class="rounded-full bg-primary text-white w-10 h-10 flex items-center justify-center">
-        <i class="fa-solid fa-cash-register"></i>
+        <!-- Cash Register Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h6v6M5 17h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+        </svg>
       </div>
       <small class="text-sm text-base-content/60">Gestión de operador y productos</small>
     </div>
@@ -40,7 +43,10 @@
 
         <div class="flex items-center gap-2">
           <label class="input input-bordered input-sm flex items-center gap-2 w-full">
-            <i class="fa-solid fa-search text-success"></i>
+            <!-- Search Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
             <input
               id="busqueda"
               type="text"
@@ -56,7 +62,10 @@
             (click)="cargarProductos()"
             title="Actualizar lista"
           >
-            <i class="fa-solid fa-rotate"></i>
+            <!-- Rotate Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M4 20v-5h5M20 4v5h-5"/>
+            </svg>
           </button>
         </div>
       </div>
@@ -82,7 +91,10 @@
         >
           <div class="card-body items-center text-center">
             <div class="text-4xl text-primary">
-              <i class="fa-solid fa-box"></i>
+              <!-- Box Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7V4a1 1 0 00-1-1h-3M4 7V4a1 1 0 011-1h3m0 0v3m0-3h6v3m0 0H5m14 3v10a1 1 0 01-1 1H6a1 1 0 01-1-1V10m0 0l6 3 6-3"/>
+              </svg>
             </div>
 
             <h6 class="font-bold text-lg mt-2">{{ producto.nombre }}</h6>
@@ -98,13 +110,11 @@
                 (click)="agregarProducto(producto); $event.stopPropagation()"
                 title="Agregar producto"
               >
-                <i class="fa-solid fa-cart-plus"></i>
+                <!-- Cart Plus Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8h13.2L17 13M7 13H3M17 13h4M12 5v6m3-3H9"/>
+                </svg>
               </button>
-            </div>
-
-            <div class="text-xs text-base-content/60 mt-2">
-              <i class="fa-solid fa-store mr-1"></i>
-              {{ producto.proveedor?.nombre || 'Proveedor' }}
             </div>
           </div>
         </div>
@@ -112,7 +122,10 @@
 
       <!-- Mensaje si no hay productos -->
       <div *ngIf="!cargando && productos.length === 0" class="text-center py-10">
-        <i class="fa-solid fa-box-open fa-3x text-base-content/40 mb-3"></i>
+        <!-- Box Open Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-base-content/40 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12v7a1 1 0 01-1 1H5a1 1 0 01-1-1v-7m16 0l-8-4-8 4"/>
+        </svg>
         <h5 class="text-base-content/60">No se encontraron productos</h5>
       </div>
     </div>
@@ -140,11 +153,14 @@
 
               <div class="flex items-center justify-between gap-2">
                 <div class="flex items-center gap-1">
+                  <!-- Minus Button -->
                   <button
                     class="btn btn-xs btn-outline"
                     (click)="actualizarCantidad(item.producto.id!, item.cantidad - 1)"
                   >
-                    <i class="fa-solid fa-minus"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                    </svg>
                   </button>
                   <input
                     type="number"
@@ -153,18 +169,24 @@
                     (change)="actualizarCantidad(item.producto.id!, item.cantidad)"
                     min="1"
                   />
+                  <!-- Plus Button -->
                   <button
                     class="btn btn-xs btn-outline"
                     (click)="actualizarCantidad(item.producto.id!, item.cantidad + 1)"
                   >
-                    <i class="fa-solid fa-plus"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
                   </button>
+                  <!-- Trash Button -->
                   <button
                     class="btn btn-xs btn-error text-white"
                     (click)="quitarProducto(item.producto.id!)"
                     title="Quitar"
                   >
-                    <i class="fa-solid fa-trash"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6"/>
+                    </svg>
                   </button>
                 </div>
 
@@ -188,20 +210,26 @@
             </div>
 
             <div class="flex flex-col gap-2">
+              <!-- Finalizar Compra -->
               <button
                 class="btn btn-success w-full"
                 (click)="procesarCompra()"
                 [disabled]="procesandoCompra"
               >
-                <i class="fa-solid fa-check-circle mr-2"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
                 {{ procesandoCompra ? 'Procesando...' : 'Finalizar Compra' }}
               </button>
+              <!-- Limpiar Todo -->
               <button
                 class="btn btn-outline btn-error w-full"
                 (click)="limpiarSeleccion()"
                 [disabled]="procesandoCompra"
               >
-                <i class="fa-solid fa-xmark mr-2"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
                 Limpiar Todo
               </button>
             </div>
@@ -209,7 +237,9 @@
 
           <ng-template #vacio>
             <div class="text-center py-10">
-              <i class="fa-solid fa-cart-shopping fa-3x text-base-content/40 mb-3"></i>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-base-content/40 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8h13.2L17 13M7 13H3M17 13h4"/>
+              </svg>
               <h6 class="text-base-content/60">No has seleccionado productos</h6>
             </div>
           </ng-template>

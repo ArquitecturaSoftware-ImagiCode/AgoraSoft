@@ -6,6 +6,7 @@ import { ProductoService, Producto } from '../../../services/producto';
 import { CompraService } from '../../../services/compra.service';
 import { AuthService } from '../../../services/auth.service';
 import { Compra } from '../../../models/Compra';
+import { ProveedorVentaService } from '../../../services/proveedor.venta.service';
 
 export interface ProductoSeleccionado {
   producto: Producto;
@@ -33,6 +34,7 @@ export class ProvVentas implements OnInit{productos: Producto[] = [];
 
 
   constructor(
+    private proveedorService: ProveedorVentaService,
     private productoService: ProductoService,
     private compraService: CompraService,
     private authService: AuthService,
@@ -59,86 +61,29 @@ export class ProvVentas implements OnInit{productos: Producto[] = [];
       p => p.nombre.toLowerCase().includes(termino) || p.categoria?.toLowerCase().includes(termino)
     );
   }
-/*
+
+
+
   async cargarProductos() {
     this.cargando = true;
     try {
-      this.productos = await this.productoService.listar();
-      console.log('Productos cargados:', this.productos);
+      // Intentar obtener productos reales del backend
+      this.productos = await this.proveedorService.listarMisProductos();
+      console.log('Productos cargados desde backend:', this.productos);
+
+      // Si el backend devolvió un arreglo vacío, usa los mock
+      if (!this.productos || this.productos.length === 0) {
+        console.warn('Backend vacío, usando productos de prueba...');
+      }
+
     } catch (error) {
+      // Si falla la conexión, usar mock
       console.error('Error al cargar productos:', error);
-      alert('Error al cargar productos. Verifica que el backend esté corriendo.');
+      console.warn('Usando productos de prueba (mock).');
     } finally {
       this.cargando = false;
     }
   }
-*/
-
-  async cargarProductos() {
-  this.cargando = true;
-  try {
-    // 🔹 Intentar obtener productos reales del backend
-    this.productos = await this.productoService.listar();
-    console.log('Productos cargados desde backend:', this.productos);
-
-    // Si el backend devolvió un arreglo vacío, usa los mock
-    if (!this.productos || this.productos.length === 0) {
-      console.warn('Backend vacío, usando productos de prueba...');
-      this.productos = this.getProductosMock();
-    }
-
-  } catch (error) {
-    // 🔹 Si falla la conexión, usar mock
-    console.error('Error al cargar productos:', error);
-    console.warn('Usando productos de prueba (mock).');
-    this.productos = this.getProductosMock();
-  } finally {
-    this.cargando = false;
-  }
-  }
-
-
-  // 🔹 Productos temporales para pruebas (mock)
-getProductosMock(): Producto[] {
-  return [
-    {
-      id: 1,
-      nombre: 'Café Molido Premium',
-      descripcion: 'Café orgánico tostado medio 500g',
-      precio: 18500,
-      categoria: 'Alimentos',
-      imagenUrl: 'https://placehold.co/100x100',
-      proveedor: { id: 101, nombre: 'Distribuidora El Cafetal' }
-    },
-    {
-      id: 2,
-      nombre: 'Pan Integral Artesanal',
-      descripcion: 'Pan fresco sin conservantes',
-      precio: 5500,
-      categoria: 'Panadería',
-      imagenUrl: 'https://placehold.co/100x100',
-      proveedor: { id: 102, nombre: 'Panadería Don Pan' }
-    },
-    {
-      id: 3,
-      nombre: 'Leche Deslactosada',
-      descripcion: 'Leche deslactosada 1L',
-      precio: 4800,
-      categoria: 'Lácteos',
-      imagenUrl: 'https://placehold.co/100x100',
-      proveedor: { id: 103, nombre: 'Lácteos del Valle' }
-    },
-    {
-      id: 4,
-      nombre: 'Queso Campesino',
-      descripcion: 'Queso fresco artesanal',
-      precio: 12500,
-      categoria: 'Lácteos',
-      imagenUrl: 'https://placehold.co/100x100',
-      proveedor: { id: 103, nombre: 'Lácteos del Valle' }
-    }
-  ];
-}
 
 
   agregarProducto(producto: Producto) {
