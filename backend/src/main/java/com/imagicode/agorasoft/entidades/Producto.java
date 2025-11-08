@@ -28,7 +28,6 @@ public class Producto {
     private String imagenUrl; // URL o ruta pública
     
     // Proveedor que vende este producto
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "proveedor_id", nullable = false)
-    private Proveedor proveedor;
+    @Column(name = "usuario_proveedor_id", nullable = false)
+    private String usuarioProveedorId;
 }

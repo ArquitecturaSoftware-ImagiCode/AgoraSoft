@@ -2,7 +2,6 @@ package com.imagicode.agorasoft.servicios;
 
 import com.imagicode.agorasoft.entidades.Producto;
 import com.imagicode.agorasoft.repositorios.ProductoRepository;
-import com.imagicode.agorasoft.repositorios.ProveedorRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -10,19 +9,13 @@ import java.util.List;
 public class ProductoService {
 
     private final ProductoRepository productoRepository;
-    private final ProveedorRepository proveedorRepository;
 
-    public ProductoService(ProductoRepository productoRepository, ProveedorRepository proveedorRepository) {
+    public ProductoService(ProductoRepository productoRepository) {
         this.productoRepository = productoRepository;
-        this.proveedorRepository = proveedorRepository;
     }
 
     public List<Producto> listar() {
         return productoRepository.findAll();
-    }
-
-    public List<Producto> listarPorProveedor(Long proveedorId) {
-        return productoRepository.findByProveedorId(proveedorId);
     }
 
     public Producto obtener(Long id) {
@@ -31,21 +24,14 @@ public class ProductoService {
     }
 
     public Producto guardar(Producto producto) {
-        // Validaciones
         if (producto.getNombre() == null || producto.getNombre().trim().isEmpty()) {
             throw new RuntimeException("El nombre del producto es obligatorio");
         }
         if (producto.getPrecio() == null || producto.getPrecio() <= 0) {
             throw new RuntimeException("El precio debe ser mayor a 0");
         }
-
-        // Validar que el proveedor existe
-        if (producto.getProveedor() != null && producto.getProveedor().getId() != null) {
-            producto.setProveedor(
-                    proveedorRepository.findById(producto.getProveedor().getId())
-                            .orElseThrow(() -> new RuntimeException("Proveedor no encontrado")));
-        } else {
-            throw new RuntimeException("El producto debe tener un proveedor asignado");
+        if (producto.getUsuarioProveedorId() == null) {
+            throw new RuntimeException("El producto debe tener un usuario proveedor asignado");
         }
 
         return productoRepository.save(producto);
@@ -69,10 +55,8 @@ public class ProductoService {
         if (producto.getImagenUrl() != null) {
             productoExistente.setImagenUrl(producto.getImagenUrl());
         }
-        if (producto.getProveedor() != null && producto.getProveedor().getId() != null) {
-            productoExistente.setProveedor(
-                    proveedorRepository.findById(producto.getProveedor().getId())
-                            .orElseThrow(() -> new RuntimeException("Proveedor no encontrado")));
+        if (producto.getUsuarioProveedorId() != null) {
+            productoExistente.setUsuarioProveedorId(producto.getUsuarioProveedorId());
         }
 
         return productoRepository.save(productoExistente);
@@ -84,4 +68,8 @@ public class ProductoService {
         }
         productoRepository.deleteById(id);
     }
+    public List<Producto> listarPorUsuarioProveedor(String usuarioProveedorId) {
+        return productoRepository.findByUsuarioProveedorId(usuarioProveedorId);
+    }
+
 }

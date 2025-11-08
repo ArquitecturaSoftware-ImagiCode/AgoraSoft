@@ -62,6 +62,7 @@ export class ProvProductos {
 
     try {
       const token = await this.auth.getToken();
+      console.log("Token:", token);
       const url = `${environment.apiBaseUrl}/productos`;
       const body = {
         nombre: this.nombre,
