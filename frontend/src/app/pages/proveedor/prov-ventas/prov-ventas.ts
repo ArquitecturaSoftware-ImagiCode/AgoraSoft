@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ProductoService, Producto } from '../../../services/producto';
+import { ProductoService} from '../../../services/producto';
 import { CompraService } from '../../../services/compra.service';
 import { AuthService } from '../../../services/auth.service';
 import { Compra } from '../../../models/Compra';
 import { ProveedorVentaService } from '../../../services/proveedor.venta.service';
+import { Producto } from '../../../models/ItemInventario';
 
 export interface ProductoSeleccionado {
   producto: Producto;

@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environments';
-import { Producto } from './producto';
+import { Producto } from '../models/ItemInventario';
 
 
 @Injectable({
