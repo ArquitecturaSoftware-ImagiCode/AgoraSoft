@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Clerk } from '@clerk/clerk-js';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Usuario } from '../models/ItemInventario';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -107,6 +108,20 @@ export class AuthService {
   async getUserId(): Promise<string | undefined> {
     const user = await this.clerk.user;
     return user?.id;
+  }
+
+  async getUser(): Promise<Usuario | undefined> {
+    const user = await this.clerk.user;
+    if (!user) return undefined;
+
+    return {
+      id: user.id,
+      nombre: user.firstName ?? '',
+      apellido: user.lastName ?? '',
+      correo: user.emailAddresses[0]?.emailAddress ?? '',
+      rol: (user.unsafeMetadata?.['role'] as string) ?? '',
+      organizacion: (user.unsafeMetadata?.['plaza'] as string) ?? '',
+    };
   }
 
   /** Obtener instancia de Clerk (por si la necesitas) */

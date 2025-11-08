@@ -15,7 +15,7 @@ export interface Producto {
   unidadMedida?: string;
   categoria?: string;
   imagenUrl?: string;
-  usuarioProveedor?: Usuario;
+  usuarioProveedor: Usuario;
 }
 
 export interface ItemInventario {
