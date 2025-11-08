@@ -18,7 +18,7 @@ import { ProvProductos } from './pages/proveedor/prov-productos/prov-productos';
 
 export const routes: Routes = [
   { path: 'register', component: SignUpPage },
-  { path: '', component: SignInPage },
+  { path: 'login', component: SignInPage },
   {
     path: 'comercial',
     component: ComercialLayout,

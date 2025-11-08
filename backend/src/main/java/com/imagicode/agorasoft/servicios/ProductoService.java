@@ -21,9 +21,13 @@ public class ProductoService {
         return productoRepository.findAll();
     }
 
+    public List<Producto> listarPorProveedor(Long proveedorId) {
+        return productoRepository.findByProveedorId(proveedorId);
+    }
+
     public Producto obtener(Long id) {
         return productoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + id));
     }
 
     public Producto guardar(Producto producto) {
@@ -34,23 +38,22 @@ public class ProductoService {
         if (producto.getPrecio() == null || producto.getPrecio() <= 0) {
             throw new RuntimeException("El precio debe ser mayor a 0");
         }
-        
+
         // Validar que el proveedor existe
         if (producto.getProveedor() != null && producto.getProveedor().getId() != null) {
             producto.setProveedor(
-                proveedorRepository.findById(producto.getProveedor().getId())
-                    .orElseThrow(() -> new RuntimeException("Proveedor no encontrado"))
-            );
+                    proveedorRepository.findById(producto.getProveedor().getId())
+                            .orElseThrow(() -> new RuntimeException("Proveedor no encontrado")));
         } else {
             throw new RuntimeException("El producto debe tener un proveedor asignado");
         }
-        
+
         return productoRepository.save(producto);
     }
-    
+
     public Producto actualizar(Long id, Producto producto) {
         Producto productoExistente = obtener(id);
-        
+
         if (producto.getNombre() != null && !producto.getNombre().trim().isEmpty()) {
             productoExistente.setNombre(producto.getNombre());
         }
@@ -68,11 +71,10 @@ public class ProductoService {
         }
         if (producto.getProveedor() != null && producto.getProveedor().getId() != null) {
             productoExistente.setProveedor(
-                proveedorRepository.findById(producto.getProveedor().getId())
-                    .orElseThrow(() -> new RuntimeException("Proveedor no encontrado"))
-            );
+                    proveedorRepository.findById(producto.getProveedor().getId())
+                            .orElseThrow(() -> new RuntimeException("Proveedor no encontrado")));
         }
-        
+
         return productoRepository.save(productoExistente);
     }
 

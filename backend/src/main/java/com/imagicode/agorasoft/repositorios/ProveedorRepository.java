@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
+    java.util.Optional<Proveedor> findByEmail(String email);
 }

@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
+    // Buscar productos por proveedor
+    java.util.List<Producto> findByProveedorId(Long proveedorId);
 }
