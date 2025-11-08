@@ -1,11 +1,71 @@
-<div class="container-fluid py-4">
+
+<div class="py-4">
+  <h1 class="text-3xl font-bold mb-3">Registrar venta</h1>
+
+  <!-- Barra de control -->
+  <div class="control-bar p-3 mb-4 rounded shadow-sm d-flex flex-wrap gap-3">
+
+    <!-- Título + icono -->
+    <div class="d-flex flex-wrap gap-3">
+      <div class="icon-circle">
+        <i class="fa-solid fa-cash-register"></i>
+      </div>
+      <div>
+        <small class="text-muted">Gestión de operador y productos</small>
+      </div>
+    </div>
+
+    <!-- Controles -->
+    <div class="d-flex flex-wrap align-items-end gap-3 flex-grow-1 justify-content-end">
+
+      <!-- Selección de operador -->
+      <div class="control-item flex-grow-1">
+        <label for="operador" class="form-label small text-muted mb-1">Operador</label>
+        <select id="operador" class="form-select form-select-sm w-100" [(ngModel)]="operadorSeleccionado">
+          <option value="">Selecciona un operador...</option>
+          <option *ngFor="let operador of operadores" [value]="operador.id">
+            {{ operador.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Búsqueda -->
+      <div class="control-item flex-grow-1">
+        <label for="busqueda" class="form-label small text-muted mb-1 d-block">Buscar producto</label>
+
+        <div class="search-group d-flex align-items-center">
+          <!-- Input de búsqueda -->
+          <div class="input-group input-group-sm flex-grow-1">
+            <span class="input-group-text bg-success text-white">
+              <i class="fa-solid fa-search"></i>
+            </span>
+            <input
+              id="busqueda"
+              type="text"
+              class="form-control"
+              placeholder="Nombre, categoría..."
+              [(ngModel)]="terminoBusqueda"
+              (input)="buscarProducto()"
+            />
+          </div>
+
+          <!-- Botón actualizar -->
+          <button
+            class="btn btn-outline-primary btn-sm ms-2"
+            (click)="cargarProductos()"
+            title="Actualizar lista"
+          >
+            <i class="fa-solid fa-rotate"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
   <div class="ventas-layout d-flex gap-4">
     <!-- Catálogo de productos -->
     <div class="catalogo flex-grow-1">
-      <div class="catalogo-header mb-3">
-        <h1 class="text-3xl font-bold">Registrar venta</h1>
-      </div>
-
       <!-- Mensaje de carga -->
       <div *ngIf="cargando" class="text-center py-5">
         <div class="spinner-border text-primary" role="status">
@@ -18,26 +78,24 @@
       <div *ngIf="!cargando && productos.length > 0" class="productos-grid">
         <div
           class="producto-card"
-          *ngFor="let producto of productos"
+          *ngFor="let producto of productos || productosFiltrados"
           (click)="agregarProducto(producto)"
         >
-          <!-- Icono -->
           <div class="producto-icon">
             <i class="fa-solid fa-box"></i>
           </div>
 
-          <!-- Contenido -->
           <h6 class="fw-bold mb-1 text-dark text-center">
             {{ producto.nombre }}
           </h6>
           <p class="text-muted small text-center">
             {{ producto.categoria || 'General' }}
           </p>
+
           <p class="text-secondary small text-center mb-2">
             {{ producto.descripcion || 'Sin descripción disponible' }}
           </p>
 
-          <!-- Footer -->
           <div class="d-flex justify-content-between align-items-center mt-auto">
             <span class="fw-semibold text-success">
               ${{ producto.precio | number:'1.0-0' }}
@@ -65,15 +123,18 @@
       </div>
     </div>
 
-    <!-- Selección actual -->
+    <!-- Carrito / Selección actual -->
     <div class="seleccion">
-      <div class="card shadow-sm sticky-top" style="top: 20px;">
-        <div class="card-header bg-success text-white d-flex align-items-center">
+      <div class="card shadow-sm sticky-top" style="top: 5px;">
+        <div class="card-header bg-success p-3 text-white d-flex align-items-center">
           <h5 class="mb-0">Selección Actual</h5>
         </div>
-        <div class="card-body">
-          <div *ngIf="productosSeleccionados.length > 0">
-            <div class="producto-seleccionado mb-3 pb-3 border-bottom" *ngFor="let item of productosSeleccionados">
+        <div class="card-body p-3">
+          <ng-container *ngIf="productosSeleccionados.length > 0; else vacio">
+            <div
+              class="producto-seleccionado mb-2 pb-3 p-2 bg-white rounded shadow-sm"
+              *ngFor="let item of productosSeleccionados"
+            >
               <div class="d-flex justify-content-between align-items-start mb-2">
                 <div class="flex-grow-1">
                   <h6 class="mb-1">{{ item.producto.nombre }}</h6>
@@ -81,43 +142,45 @@
                     ${{ item.producto.precio | number:'1.0-0' }} c/u
                   </small>
                 </div>
-                <button 
-                  class="btn btn-danger btn-sm btn-icon"
-                  (click)="quitarProducto(item.producto.id!)"
-                  title="Quitar"
-                >
-                  <i class="fa-solid fa-trash"></i>
-                </button>
               </div>
+
               <div class="d-flex align-items-center justify-content-between">
-                <div class="input-group cantidad-control">
-                  <button 
-                    class="btn btn-outline-secondary btn-sm btn-icon"
+                <div class="cantidad-control d-flex align-items-center gap-1">
+                  <button
+                    class="btn btn-outline-secondary btn-sm p-1"
                     (click)="actualizarCantidad(item.producto.id!, item.cantidad - 1)"
                   >
                     <i class="fa-solid fa-minus"></i>
                   </button>
-                  <input 
-                    type="number" 
-                    class="form-control form-control-sm text-center" 
+                  <input
+                    type="number"
+                    class="form-control form-control-sm text-center px-1"
+                    style="width: 55px;"
                     [(ngModel)]="item.cantidad"
                     (change)="actualizarCantidad(item.producto.id!, item.cantidad)"
                     min="1"
-                  >
-                  <button 
-                    class="btn btn-outline-secondary btn-sm btn-icon"
+                  />
+                  <button
+                    class="btn btn-outline-secondary btn-sm p-1"
                     (click)="actualizarCantidad(item.producto.id!, item.cantidad + 1)"
                   >
                     <i class="fa-solid fa-plus"></i>
                   </button>
+                  <button
+                    class="btn btn-danger btn-sm btn-icon"
+                    (click)="quitarProducto(item.producto.id!)"
+                    title="Quitar"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
                 </div>
-                <strong class="text-success">
+                <strong class="text-success ms-2">
                   ${{ (item.producto.precio * item.cantidad) | number:'1.0-0' }}
                 </strong>
               </div>
             </div>
 
-            <div class="border-top pt-3 mb-3">
+            <div class="border-top pt-3 mb-3 bg-white shadow-sm">
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <span class="text-muted">Productos:</span>
                 <strong>{{ cantidadTotalProductos }} unidades</strong>
@@ -131,7 +194,7 @@
             </div>
 
             <div class="d-grid gap-2">
-              <button 
+              <button
                 class="btn btn-success btn-lg"
                 (click)="procesarCompra()"
                 [disabled]="procesandoCompra"
@@ -139,8 +202,8 @@
                 <i class="fa-solid fa-check-circle me-2"></i>
                 {{ procesandoCompra ? 'Procesando...' : 'Finalizar Compra' }}
               </button>
-              <button 
-                class="btn btn-outline-secondary"
+              <button
+                class="btn btn-outline-secondary btn-hover-danger w-50"
                 (click)="limpiarSeleccion()"
                 [disabled]="procesandoCompra"
               >
@@ -148,12 +211,14 @@
                 Limpiar Todo
               </button>
             </div>
-          </div>
+          </ng-container>
 
-          <div *ngIf="productosSeleccionados.length === 0" class="text-center py-5">
-            <i class="fa-solid fa-cart-shopping fa-3x text-muted mb-3"></i>
-            <h6 class="text-muted">No has seleccionado productos</h6>
-          </div>
+          <ng-template #vacio>
+            <div class="text-center py-5">
+              <i class="fa-solid fa-cart-shopping fa-3x text-muted mb-3"></i>
+              <h6 class="text-muted">No has seleccionado productos</h6>
+            </div>
+          </ng-template>
         </div>
       </div>
     </div>

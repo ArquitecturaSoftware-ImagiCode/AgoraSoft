@@ -26,6 +26,10 @@ export class ProvVentas implements OnInit{productos: Producto[] = [];
   productosSeleccionados: ProductoSeleccionado[] = [];
   cargando: boolean = false;
   procesandoCompra: boolean = false;
+  operadores: any[] = [];
+  productosFiltrados: any[] = []; // nueva lista filtrada
+  operadorSeleccionado: string = '';
+  terminoBusqueda: string = '';
 
 
   constructor(
@@ -36,7 +40,24 @@ export class ProvVentas implements OnInit{productos: Producto[] = [];
   ) {}
 
   async ngOnInit() {
+      this.cargarOperadores();
     await this.cargarProductos();
+  }
+
+  cargarOperadores() {
+    // Aquí iría tu servicio real de operadores
+    this.operadores = [
+      { id: 1, nombre: 'Operador 1' },
+      { id: 2, nombre: 'Operador 2' },
+      { id: 3, nombre: 'Operador 3' }
+    ];
+  }
+
+  buscarProducto() {
+    const termino = this.terminoBusqueda.toLowerCase();
+    this.productosFiltrados = this.productos.filter(
+      p => p.nombre.toLowerCase().includes(termino) || p.categoria?.toLowerCase().includes(termino)
+    );
   }
 /*
   async cargarProductos() {
