@@ -6,24 +6,24 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "detalles_compra")
+@Table(name = "detalles_venta")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DetalleCompra {
+public class DetalleVenta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relación con la compra
+    // Relación con la venta
     @ManyToOne(optional = false)
-    @JoinColumn(name = "compra_id", nullable = false)
+    @JoinColumn(name = "venta_id", nullable = false)
     @JsonIgnore
-    private Compra compra;
+    private Venta venta;
 
-    // Producto comprado
+    // Producto vendido
     @ManyToOne(optional = false)
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
@@ -32,7 +32,7 @@ public class DetalleCompra {
     @Column(nullable = false)
     private Integer cantidad;
 
-    // Precio unitario (al momento de la compra)
+    // Precio unitario (al momento de la venta)
     @Column(name = "precio_unitario", nullable = false, precision = 10, scale = 2)
     private BigDecimal precioUnitario;
 
@@ -48,3 +48,4 @@ public class DetalleCompra {
         }
     }
 }
+

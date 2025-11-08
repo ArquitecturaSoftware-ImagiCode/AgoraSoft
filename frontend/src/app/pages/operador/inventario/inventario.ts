@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ItemInventarioService } from '../../../services/item-inventario.service';
 import { ItemInventario, Inventario } from '../../../models/ItemInventario';
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-operador-inventario',
@@ -22,7 +23,8 @@ export class InventarioComponent implements OnInit {
 
   constructor(
     private itemInventarioService: ItemInventarioService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   async ngOnInit() {
@@ -69,16 +71,7 @@ export class InventarioComponent implements OnInit {
 
 
   comprarAProveedores() {
-    const mensaje = `Funcionalidad de Compra a Proveedores
-    
-Esta funcionalidad te permitirá:
-- Ver catálogo de productos disponibles
-- Agregar productos al inventario
-- Realizar pedidos a proveedores
-- Gestionar compras y entregas
-    
-Próximamente disponible!`;
-    alert(mensaje);
+    this.router.navigate(['/operador/compras']);
   }
 
   editarCantidad(item: ItemInventario) {
