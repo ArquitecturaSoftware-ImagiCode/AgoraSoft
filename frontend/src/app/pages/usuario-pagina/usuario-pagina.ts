@@ -40,7 +40,7 @@ export class UsuarioPagina implements OnInit {
   }
 
   // DELETE
-  eliminarUsuario(id: number): void {
+  eliminarUsuario(id: string): void {
     this.usuarioService.eliminarUsuario(id).subscribe({
       next: () => {
         this.usuarios = this.usuarios.filter((u) => u.id !== id);

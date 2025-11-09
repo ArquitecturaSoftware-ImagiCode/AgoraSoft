@@ -5,9 +5,11 @@ import { Router } from '@angular/router';
 import { ProductoService} from '../../../services/producto';
 import { CompraService } from '../../../services/compra.service';
 import { AuthService } from '../../../services/auth.service';
-import { Compra } from '../../../models/Compra';
 import { ProveedorVentaService } from '../../../services/proveedor.venta.service';
-import { Producto } from '../../../models/ItemInventario';
+import { Producto, Usuario} from '../../../models/ItemInventario';
+import { UsuarioService } from '../../../services/usuario.service';
+import { Compra } from '../../../models/Compra';
+import { firstValueFrom } from 'rxjs';
 
 export interface ProductoSeleccionado {
   producto: Producto;
@@ -28,7 +30,7 @@ export class ProvVentas implements OnInit{productos: Producto[] = [];
   productosSeleccionados: ProductoSeleccionado[] = [];
   cargando: boolean = false;
   procesandoCompra: boolean = false;
-  operadores: any[] = [];
+  operadores: Usuario[] = [];
   productosFiltrados: any[] = []; // nueva lista filtrada
   operadorSeleccionado: string = '';
   terminoBusqueda: string = '';
@@ -36,6 +38,7 @@ export class ProvVentas implements OnInit{productos: Producto[] = [];
 
   constructor(
     private proveedorService: ProveedorVentaService,
+    private usuarioService: UsuarioService,
     private productoService: ProductoService,
     private compraService: CompraService,
     private authService: AuthService,
@@ -47,13 +50,18 @@ export class ProvVentas implements OnInit{productos: Producto[] = [];
     await this.cargarProductos();
   }
 
-  cargarOperadores() {
-    // Aquí iría tu servicio real de operadores
-    this.operadores = [
-      { id: 1, nombre: 'Operador 1' },
-      { id: 2, nombre: 'Operador 2' },
-      { id: 3, nombre: 'Operador 3' }
-    ];
+
+  cargarOperadores(): void {
+    this.usuarioService.listarOperadores().subscribe({
+      next: (data) => {
+        this.operadores = data;
+        console.log('Operadores cargados:', this.operadores);
+      },
+      error: (error) => {
+        console.error('Error al cargar operadores:', error);
+        alert('No se pudieron cargar los operadores.');
+      }
+    });
   }
 
   buscarProducto() {
@@ -130,84 +138,82 @@ export class ProvVentas implements OnInit{productos: Producto[] = [];
   }
 
   async procesarCompra() {
-    console.log("hola")
+    if (this.productosSeleccionados.length === 0) {
+      alert('No has seleccionado ningún producto.');
+      return;
+    }
+
+    if (!this.operadorSeleccionado) {
+      alert('Por favor selecciona un operador antes de procesar la venta.');
+      return;
+    }
+
+    if (!confirm(`¿Confirmar venta por $${this.totalCompra.toLocaleString('es-CO')} al operador seleccionado?`)) {
+      return;
+    }
+
+    try {
+      this.procesandoCompra = true;
+
+      // Obtener el usuario logueado (proveedor actual)
+      const proveedor = await this.authService.getUser();
+      if (!proveedor) {
+        alert('Error: No se pudo obtener el proveedor logueado.');
+        this.procesandoCompra = false;
+        return;
+      }
+      
+      // Obtener el operador seleccionado desde la API
+      const operador = await firstValueFrom(
+        this.usuarioService.getUsuarioPorId(this.operadorSeleccionado)
+      );
+
+      
+      if (!operador) {
+        alert('Operador no válido.');
+        this.procesandoCompra = false;
+        return;
+      }
+
+      // Crear la venta (que en la BD se registra como una compra del operador)
+      const total = this.productosSeleccionados.reduce(
+        (sum, item) => sum + item.producto.precio * item.cantidad,
+        0
+      );
+
+      const venta: Compra = {
+        usuario: operador, // ← el comprador es el operador seleccionado
+        proveedor: proveedor, // ← el proveedor es el usuario logueado
+        fechaCompra: new Date().toISOString(),
+        total: total,
+        detalles: this.productosSeleccionados.map(item => ({
+          producto: {
+            id: item.producto.id!,
+            nombre: item.producto.nombre,
+            precio: item.producto.precio
+          },
+          cantidad: item.cantidad,
+          precioUnitario: item.producto.precio,
+          subtotal: item.producto.precio * item.cantidad
+        }))
+      };
+
+      const ventaGuardada = await this.compraService.crearCompra(venta);
+      console.log('Venta registrada exitosamente:', ventaGuardada);
+
+      this.procesandoCompra = false;
+
+      alert(`✅ ¡Venta registrada exitosamente!\n\nProductos vendidos: ${this.cantidadTotalProductos}\nTotal: $${this.totalCompra.toLocaleString('es-CO')}`);
+
+      // Limpiar la selección
+      this.productosSeleccionados = [];
+      this.operadorSeleccionado = '';
+
+    } catch (error) {
+      this.procesandoCompra = false;
+      console.error('Error al registrar la venta:', error);
+      alert('Error al registrar la venta. Por favor, intenta de nuevo.');
+    }
   }
-  // async procesarCompra() {
-  //   if (this.productosSeleccionados.length === 0) {
-  //     alert('No has seleccionado ningún producto.');
-  //     return;
-  //   }
 
-  //   if (!confirm(`¿Confirmar compra por $${this.totalCompra.toLocaleString('es-CO')}?`)) {
-  //     return;
-  //   }
-
-  //   try {
-  //     this.procesandoCompra = true;
-
-  //     // Obtener el ID del usuario logueado
-  //     const usuarioId = await this.authService.getUserId();
-  //     if (!usuarioId) {
-  //       alert('Error: No se pudo obtener el usuario logueado.');
-  //       this.procesandoCompra = false;
-  //       return;
-  //     }
-
-  //     // Agrupar productos por proveedor
-  //     const productosPorProveedor = new Map<number, ProductoSeleccionado[]>();
-  //     this.productosSeleccionados.forEach(item => {
-  //       const proveedorId = item.producto.proveedor.id;
-  //       if (!productosPorProveedor.has(proveedorId)) {
-  //         productosPorProveedor.set(proveedorId, []);
-  //       }
-  //       productosPorProveedor.get(proveedorId)!.push(item);
-  //     });
-
-  //     // Crear una compra por cada proveedor
-  //     const comprasCreadas: Compra[] = [];
-  //     for (const [proveedorId, items] of productosPorProveedor) {
-  //       const proveedor = items[0].producto.proveedor;
-  //       const total = items.reduce((sum, item) => sum + (item.producto.precio * item.cantidad), 0);
-
-  //       const compra: Compra = {
-  //         usuario: { id: usuarioId },
-  //         proveedor: {
-  //           id: proveedorId,
-  //           nombre: proveedor.nombre || 'Proveedor'
-  //         },
-  //         fechaCompra: new Date().toISOString(),
-  //         total: total,
-  //         detalles: items.map(item => ({
-  //           producto: {
-  //             id: item.producto.id!,
-  //             nombre: item.producto.nombre,
-  //             precio: item.producto.precio
-  //           },
-  //           cantidad: item.cantidad,
-  //           precioUnitario: item.producto.precio,
-  //           subtotal: item.producto.precio * item.cantidad
-  //         }))
-  //       };
-
-  //       const compraGuardada = await this.compraService.crearCompra(compra);
-  //       comprasCreadas.push(compraGuardada);
-  //       console.log('Compra registrada:', compraGuardada);
-  //     }
-
-  //     this.procesandoCompra = false;
-
-  //     alert(`¡Compra realizada exitosamente!\n\n${comprasCreadas.length} ${comprasCreadas.length === 1 ? 'orden creada' : 'órdenes creadas'}\nProductos agregados al inventario: ${this.cantidadTotalProductos}\nTotal: $${this.totalCompra.toLocaleString('es-CO')}`);
-
-  //     // Limpiar selección
-  //     this.productosSeleccionados = [];
-
-  //     // Navegar al inventario
-  //     this.router.navigate(['/operador/inventario']);
-
-  //   } catch (error) {
-  //     this.procesandoCompra = false;
-  //     console.error('Error al procesar la compra:', error);
-  //     alert('Error al procesar la compra. Por favor, intenta de nuevo.');
-  //   }
-  // }
 }

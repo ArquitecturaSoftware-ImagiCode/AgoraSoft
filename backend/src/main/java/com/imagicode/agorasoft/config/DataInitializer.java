@@ -25,7 +25,7 @@ public class DataInitializer {
                         u.setNombre("Proveedor");
                         u.setApellido("Demo");
                         u.setCorreo(correoProveedor);
-                        u.setRol("PROVEEDOR");
+                        u.setRol("operador");
                         u.setOrganizacion("DemoOrg");
                         System.out.println("🌱 Creando usuario proveedor: " + correoProveedor);
                         return usuarioRepository.save(u);

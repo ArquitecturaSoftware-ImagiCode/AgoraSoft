@@ -40,4 +40,11 @@ public class UsuarioController {
     public void eliminarUsuario(@PathVariable String id) {
         usuarioService.eliminarUsuario(id);
     }
+
+    // GET: traer todos los operadores (usuarios con rol OPERADOR)
+    @GetMapping("/operadores")
+    public List<Usuario> listarOperadores() {
+        return usuarioService.obtenerUsuariosPorRol("operador");
+    }
+
 }

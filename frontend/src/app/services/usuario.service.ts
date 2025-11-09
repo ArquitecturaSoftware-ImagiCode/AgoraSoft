@@ -1,15 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuario } from '../models/Usuario';
+import { environment } from '../../environments/environments';
+import { AuthService } from './auth.service';
+import { Usuario } from '../models/ItemInventario';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl = 'http://localhost:8080/usuarios';
+  private apiUrl = `${environment.apiBaseUrl}/usuarios`;
+  
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+    
+  ) {}
 
-  constructor(private http: HttpClient) {}
+  // Construye encabezados con token del usuario
+  private async getAuthHeaders(): Promise<HttpHeaders> {
+    const token = await this.authService.getToken();
+    return new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+    });
+  }
 
   // GET: traer todos los usuarios
   getUsuarios(): Observable<Usuario[]> {
@@ -17,7 +32,7 @@ export class UsuarioService {
   }
 
   // GET: traer usuario por id
-  getUsuarioPorId(id: number): Observable<Usuario> {
+  getUsuarioPorId(id: string): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
   }
 
@@ -27,16 +42,16 @@ export class UsuarioService {
   }
 
   // PUT: actualizar usuario por id
-  actualizarUsuario(id: number | undefined, usuario: Usuario): Observable<Usuario> {
+  actualizarUsuario(id: string, usuario: Usuario): Observable<Usuario> {
     return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuario);
   }
 
   // DELETE: eliminar usuario por id
-  eliminarUsuario(id: number): Observable<void> {
+  eliminarUsuario(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  agregarUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>('http://localhost:8080/usuarios', usuario);
+  listarOperadores(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.apiUrl}/operadores`);
   }
 }
