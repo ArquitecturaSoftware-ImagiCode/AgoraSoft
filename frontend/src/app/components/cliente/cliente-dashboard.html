@@ -1,0 +1,35 @@
+<main class="flex bg-gray-100 min-h-screen">
+  <!-- Sidebar -->
+  <div class="h-[100vh] bg-blue-900 w-72 p-5 shadow-sm fixed">
+    <img class="w-40 h-10" src="/logowhite.svg" alt="Logo" />
+
+    <div class="w-full flex-col mt-10">
+      <button
+        class="w-full flex py-3 px-5 rounded-lg gap-2 text-white hover:text-blue-900 hover:bg-white transition-all duration-300"
+        (click)="logout()"
+        type="button"
+      >
+        Cerrar Sesión
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="w-full sm:ml-72 lg:ml-52">
+    <div class="lg:pl-30 lg:pr-10 pb-12 pt-5">
+      <div class="p-6 bg-white shadow rounded-lg">
+        <h2 class="text-2xl font-bold text-blue-900 mb-2">Dashboard Cliente</h2>
+        <p class="text-sm text-gray-500 mb-6 italic">
+          ⚠️ Este es un dashboard temporal antes del panel real.
+        </p>
+
+        <p *ngIf="cliente" class="text-gray-700">
+          Bienvenido, <span class="font-semibold">{{ cliente.nombre || cliente.email }}</span>
+        </p>
+        <p *ngIf="!cliente" class="text-gray-500">
+          Inicia sesión para ver tu dashboard.
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
