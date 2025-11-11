@@ -1,0 +1,99 @@
+<div class="w-full flex justify-center items-center min-h-screen bg-gray-50">
+  <form
+    #registerForm="ngForm"
+    (ngSubmit)="onSubmit()"
+    class="space-y-5 bg-white p-8 rounded-2xl shadow-lg w-full max-w-2xl"
+  >
+    <div>
+      <h1 class="text-3xl font-bold text-center text-blue-900">Registro de Cliente</h1>
+      <p class="text-gray-500 text-sm mt-2 text-center">
+        Completa todos los campos para crear tu cuenta.
+      </p>
+    </div>
+
+    <div class="mt-5 space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <fieldset class="fieldset">
+          <legend class="text-md">Nombre</legend>
+          <input
+            type="text"
+            class="input w-full border border-gray-300 rounded-md p-2"
+            name="nombre"
+            [(ngModel)]="cliente.nombre"
+            required
+            placeholder="ej. Juan"
+            #nombreCtrl="ngModel"
+          />
+          <p class="label text-red-500 text-sm mt-1" *ngIf="nombreCtrl.invalid && nombreCtrl.touched">
+            Nombre es obligatorio
+          </p>
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="text-md">Teléfono</legend>
+          <input
+            type="text"
+            class="input w-full border border-gray-300 rounded-md p-2"
+            name="telefono"
+            [(ngModel)]="cliente.telefono"
+            required
+            placeholder="ej. 3001234567"
+            #telefonoCtrl="ngModel"
+          />
+          <p class="label text-red-500 text-sm mt-1" *ngIf="telefonoCtrl.invalid && telefonoCtrl.touched">
+            Teléfono es obligatorio
+          </p>
+        </fieldset>
+      </div>
+
+      <fieldset class="fieldset">
+        <legend class="text-md">Correo</legend>
+        <input
+          type="email"
+          class="input w-full border border-gray-300 rounded-md p-2"
+          name="email"
+          [(ngModel)]="cliente.email"
+          required
+          email
+          placeholder="ej. correo@email.com"
+          #emailCtrl="ngModel"
+        />
+        <p class="label text-red-500 text-sm mt-1" *ngIf="emailCtrl.invalid && emailCtrl.touched">
+          <span *ngIf="emailCtrl.errors?.['required']">Correo es obligatorio</span>
+          <span *ngIf="emailCtrl.errors?.['email']">Correo inválido</span>
+        </p>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="text-md">Contraseña</legend>
+        <input
+          type="password"
+          class="input w-full border border-gray-300 rounded-md p-2"
+          name="password"
+          [(ngModel)]="cliente.password"
+          required
+          minlength="8"
+          placeholder="Contraseña"
+          #passwordCtrl="ngModel"
+        />
+        <p class="label text-red-500 text-sm mt-1" *ngIf="passwordCtrl.invalid && passwordCtrl.touched">
+          <span *ngIf="passwordCtrl.errors?.['required']">Contraseña es obligatoria</span>
+          <span *ngIf="passwordCtrl.errors?.['minlength']">Mínimo 8 caracteres</span>
+        </p>
+      </fieldset>
+
+      <button
+        class="btn bg-blue-900 text-white w-full mt-4 flex items-center justify-center py-2 rounded-md hover:bg-blue-800 transition"
+        type="submit"
+        [disabled]="registerForm.invalid"
+      >
+        Registrarse
+      </button>
+    </div>
+
+    <div class="flex justify-between text-sm items-center mt-3">
+      <p class="text-gray-500">¿Ya tienes una cuenta?</p>
+      <a class="text-blue-800 underline" routerLink="/cliente/login">Iniciar sesión</a>
+    </div>
+  </form>
+</div>

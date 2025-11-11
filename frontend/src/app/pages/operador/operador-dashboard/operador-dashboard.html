@@ -1,12 +1,230 @@
-<main>
-  <h1 class="text-3xl font-bold">Dashboard Operador</h1>
-  <div>
-    <div *ngIf="usuario">
-      <h2>Usuario</h2>
-      <pre>{{ usuario | json }}</pre>
-    </div>
-    <div *ngIf="!usuario">
-      <p>No se pudo cargar la información del usuario.</p>
+<div class="container-fluid py-4">
+  <!-- Encabezado de bienvenida -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="card-body text-white p-4">
+          <h2 class="mb-1">{{ saludo }}, {{ usuario?.nombre || 'Operador' }}!</h2>
+          <p class="mb-0 opacity-75">
+            <i class="fas fa-building me-2"></i>{{ usuario?.organizacion || 'Organización' }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
-</main>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2 text-muted">Cargando estadísticas...</p>
+  </div>
+
+  <!-- Estadísticas principales -->
+  <div *ngIf="!cargando" class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="text-muted mb-1 small">Productos en Inventario</p>
+              <h3 class="mb-0 fw-bold">{{ totalProductosInventario }}</h3>
+            </div>
+            <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+              <i class="fas fa-box text-primary fa-2x"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="text-muted mb-1 small">Total Unidades</p>
+              <h3 class="mb-0 fw-bold">{{ totalUnidadesInventario }}</h3>
+            </div>
+            <div class="bg-success bg-opacity-10 rounded-3 p-3">
+              <i class="fas fa-cubes text-success fa-2x"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="text-muted mb-1 small">Valor Total Inventario</p>
+              <h3 class="mb-0 fw-bold">${{ valorTotalInventario | number:'1.0-0' }}</h3>
+            </div>
+            <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+              <i class="fas fa-dollar-sign text-warning fa-2x"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="text-muted mb-1 small">Compras Realizadas</p>
+              <h3 class="mb-0 fw-bold">{{ totalComprasRealizadas }}</h3>
+            </div>
+            <div class="bg-info bg-opacity-10 rounded-3 p-3">
+              <i class="fas fa-shopping-cart text-info fa-2x"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Acciones rápidas -->
+  <div *ngIf="!cargando" class="row g-3 mb-4">
+    <div class="col-12">
+      <h5 class="mb-3">
+        <i class="fas fa-bolt me-2 text-warning"></i>
+        Acciones Rápidas
+      </h5>
+    </div>
+    <div class="col-md-4">
+      <a routerLink="/operador/compras" class="text-decoration-none">
+        <div class="card border-0 shadow-sm hover-card">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-cart-plus fa-3x text-primary mb-3"></i>
+            <h5 class="card-title">Comprar Productos</h5>
+            <p class="card-text text-muted small">Agrega nuevos productos al inventario</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-4">
+      <a routerLink="/operador/inventario" class="text-decoration-none">
+        <div class="card border-0 shadow-sm hover-card">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-warehouse fa-3x text-success mb-3"></i>
+            <h5 class="card-title">Ver Inventario</h5>
+            <p class="card-text text-muted small">Gestiona tus productos existentes</p>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-4">
+      <a routerLink="/operador/historial-compras" class="text-decoration-none">
+        <div class="card border-0 shadow-sm hover-card">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-history fa-3x text-info mb-3"></i>
+            <h5 class="card-title">Historial</h5>
+            <p class="card-text text-muted small">Revisa tus compras anteriores</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Productos recientes y compras recientes -->
+  <div *ngIf="!cargando" class="row g-3">
+    <!-- Productos recientes en inventario -->
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+          <h5 class="mb-0">
+            <i class="fas fa-box me-2 text-primary"></i>
+            Productos en Inventario
+          </h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="productosRecientes.length === 0" class="text-center py-4">
+            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+            <p class="text-muted">No tienes productos en el inventario</p>
+            <a routerLink="/operador/compras" class="btn btn-primary btn-sm">
+              Comprar Productos
+            </a>
+          </div>
+          <div *ngIf="productosRecientes.length > 0">
+            <div class="list-group list-group-flush">
+              <div class="list-group-item px-0" *ngFor="let item of productosRecientes">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-1">{{ item.producto.nombre }}</h6>
+                    <small class="text-muted">{{ item.producto.categoria || 'Sin categoría' }}</small>
+                  </div>
+                  <div class="text-end">
+                    <span class="badge bg-primary">{{ item.cantidad }} unidades</span>
+                    <br>
+                    <small class="text-muted">${{ item.producto.precio | number:'1.0-0' }} c/u</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-3">
+              <a routerLink="/operador/inventario" class="btn btn-sm btn-outline-primary">
+                Ver todo el inventario
+                <i class="fas fa-arrow-right ms-1"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compras recientes -->
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+          <h5 class="mb-0">
+            <i class="fas fa-shopping-bag me-2 text-success"></i>
+            Compras Recientes
+          </h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="comprasRecientes.length === 0" class="text-center py-4">
+            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+            <p class="text-muted">Aún no has realizado compras</p>
+            <a routerLink="/operador/compras" class="btn btn-success btn-sm">
+              Realizar Primera Compra
+            </a>
+          </div>
+          <div *ngIf="comprasRecientes.length > 0">
+            <div class="list-group list-group-flush">
+              <div class="list-group-item px-0" *ngFor="let compra of comprasRecientes">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-1">Compra #{{ compra.id }}</h6>
+                    <small class="text-muted">
+                      <i class="fas fa-store me-1"></i>{{ compra.proveedor.nombre }}
+                    </small>
+                    <br>
+                    <small class="text-muted">
+                      <i class="fas fa-calendar me-1"></i>{{ compra.fechaCompra | date:'short' }}
+                    </small>
+                  </div>
+                  <div class="text-end">
+                    <span class="badge bg-success">${{ compra.total | number:'1.0-0' }}</span>
+                    <br>
+                    <small class="text-muted">{{ compra.detalles?.length || 0 }} productos</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-3">
+              <a routerLink="/operador/historial-compras" class="btn btn-sm btn-outline-success">
+                Ver historial completo
+                <i class="fas fa-arrow-right ms-1"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,12 +6,24 @@ import { AuthGuard } from './services/auth.guard';
 import { ComercialDashboard } from './pages/comercial/comercial-dashboard/comercial-dashboard';
 import { ProveedorDashboard } from './pages/proveedor/proveedor-dashboard/proveedor-dashboard';
 import { OperadorDashboard } from './pages/operador/operador-dashboard/operador-dashboard';
+import { InventarioComponent } from './pages/operador/inventario/inventario';
+import { ComprasComponent } from './pages/operador/compras/compras';
+import { HistorialComprasComponent } from './pages/operador/historial-compras/historial-compras';
+import { VentasComponent } from './pages/operador/ventas/ventas';
+import { HistorialVentasComponent } from './pages/operador/historial-ventas/historial-ventas';
 import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
+import { ClienteDashboardPage } from './components/cliente/dashboard/dashboard-page';
+import { ClienteLoginPage } from './components/cliente/login/login-page';
+import { ClienteRegisterPage } from './components/cliente/register/register-page';
+import { EmpleadoPagina } from './pages/empleado-pagina/empleado-pagina';
 
 export const routes: Routes = [
-  { path: 'singup', component: SignUpPage },
-  { path: 'login', component: SignInPage },
+  { path: 'cliente/register', component: ClienteRegisterPage },
+  { path: 'cliente/login', component: ClienteLoginPage },
+  { path: 'cliente/dashboard', component: ClienteDashboardPage },
+  { path: 'register', component: SignUpPage },
+  { path: '', component: SignInPage },
   {
     path: 'comercial',
     component: ComercialLayout,
@@ -46,6 +58,30 @@ export const routes: Routes = [
         path: 'dashboard',
         component: OperadorDashboard,
       },
+      {
+        path: 'inventario',
+        component: InventarioComponent,
+      },
+      {
+        path: 'compras',
+        component: ComprasComponent,
+      },
+      {
+        path: 'historial-compras',
+        component: HistorialComprasComponent,
+      },
+      {
+        path: 'ventas',
+        component: VentasComponent,
+      },
+      {
+        path: 'historial-ventas',
+        component: HistorialVentasComponent,
+      },
+      {
+        path: 'registro-empleados',
+        component:EmpleadoPagina
+      }
     ],
   },
 ];

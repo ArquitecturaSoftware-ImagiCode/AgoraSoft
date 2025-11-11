@@ -64,11 +64,29 @@
         <p class="label" *ngIf="submitted && f['contrasena'].errors">
           <span class="text-red-500" *ngIf="f['contrasena'].errors['required']">Contraseña es obligatoria</span>
           <span class="text-red-500" *ngIf="f['contrasena'].errors['minlength']"
-            >Mínimo 6 caracteres</span
+            >Mínimo 8 caracteres</span
           >
         </p>
       </fieldset>
-      <button class="btn bg-blue-900 text-white w-full mt-4" type="submit">Registrarse</button>
+      
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mt-4" role="alert">
+        <span class="block">{{ errorMessage }}</span>
+      </div>
+      
+      <button 
+        class="btn bg-blue-900 text-white w-full mt-4 flex items-center justify-center" 
+        type="submit"
+        [disabled]="isLoading"
+        [class.opacity-50]="isLoading"
+        [class.cursor-not-allowed]="isLoading"
+      >
+        <svg *ngIf="isLoading" class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        {{ isLoading ? 'Creando cuenta...' : 'Registrarse' }}
+      </button>
     </div>
     <div class="flex justify-between text-sm items-center">
       <p class="text-gray-500">¿Ya tienes una cuenta?</p>
@@ -86,16 +104,34 @@
         <legend class="text-md">Codigo enviado</legend>
         <input
           class="input w-full"
-          type="number"
+          type="text"
           [(ngModel)]="code"
           name="code"
           placeholder="ej. 393781"
+          maxlength="6"
           required
         />
-        <p class="label text-red-500" *ngIf="submitted && f['nombre'].errors">Requerido</p>
+        <p class="label text-gray-500 text-xs mt-1">Ingresa el código de 6 dígitos enviado a tu correo</p>
       </fieldset>
+      
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" role="alert">
+        <span class="block">{{ errorMessage }}</span>
+      </div>
 
-      <button class="btn bg-blue-800 text-white w-full" type="submit">Verificar</button>
+      <button 
+        class="btn bg-blue-800 text-white w-full flex items-center justify-center" 
+        type="submit"
+        [disabled]="isVerifying"
+        [class.opacity-50]="isVerifying"
+        [class.cursor-not-allowed]="isVerifying"
+      >
+        <svg *ngIf="isVerifying" class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        {{ isVerifying ? 'Verificando...' : 'Verificar' }}
+      </button>
     </div>
   </form>
 </div>

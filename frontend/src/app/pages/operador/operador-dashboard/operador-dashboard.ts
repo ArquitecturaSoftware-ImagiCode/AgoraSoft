@@ -1,47 +1,90 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { CommonModule, JsonPipe } from '@angular/common';
-import {environment} from '../../../../environments/environments';
+import { ItemInventarioService } from '../../../services/item-inventario.service';
+import { CompraService } from '../../../services/compra.service';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-operador-dashboard',
-  imports: [JsonPipe, CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './operador-dashboard.html',
   styleUrl: './operador-dashboard.css'
 })
 export class OperadorDashboard implements OnInit {
-  token: string = '';
   usuario: any = null;
+  cargando = true;
+  
+  // Estadísticas
+  totalProductosInventario = 0;
+  totalUnidadesInventario = 0;
+  valorTotalInventario = 0;
+  totalComprasRealizadas = 0;
+  comprasRecientes: any[] = [];
+  productosRecientes: any[] = [];
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private itemInventarioService: ItemInventarioService,
+    private compraService: CompraService
+  ) {}
 
   async ngOnInit() {
-    // Espera a que Clerk esté inicializado y el usuario esté autenticado
-    if (!this.authService.isSignedIn()) {
-      console.warn('Usuario no autenticado. Redirigiendo a login...');
-      // Aquí podrías redirigir al login si lo deseas
-      return;
-    }
-    this.token = (await this.authService.getToken()) || '';
-    console.log('Token obtenido:', this.token);
-    if (!this.token) {
-      console.error('No se obtuvo un token válido.');
-      return;
-    }
+    await this.cargarDatosUsuario();
+    await this.cargarEstadisticas();
+  }
+
+  async cargarDatosUsuario() {
     try {
-      const response = await fetch(`${environment.apiBaseUrl}/usuario`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${this.token.toString()}`,
-        },
-        credentials: 'include', // 🔹 si usas cookies en Clerk
-      });
-      if (!response.ok) {
-        throw new Error('Error HTTP: ' + response.status);
+      const clerkUser = await this.authService.getClerkInstance().user;
+      if (clerkUser) {
+        this.usuario = {
+          nombre: clerkUser.firstName,
+          apellido: clerkUser.lastName,
+          email: clerkUser.emailAddresses?.[0]?.emailAddress,
+          rol: clerkUser.unsafeMetadata?.['role'],
+          organizacion: clerkUser.unsafeMetadata?.['plaza']
+        };
       }
-      this.usuario = await response.json();
     } catch (error) {
-      console.error('Error al obtener usuario:', error);
+      console.error('Error al cargar usuario:', error);
     }
+  }
+
+  async cargarEstadisticas() {
+    try {
+      const usuarioId = await this.authService.getUserId();
+      if (!usuarioId) return;
+
+      const inventarioId = `i_${usuarioId}`;
+      
+      // Cargar inventario
+      const itemsInventario = await this.itemInventarioService.listarPorInventario(inventarioId);
+      this.totalProductosInventario = itemsInventario.length;
+      this.totalUnidadesInventario = itemsInventario.reduce((sum, item) => sum + item.cantidad, 0);
+      this.valorTotalInventario = itemsInventario.reduce((sum, item) => 
+        sum + (item.producto.precio * item.cantidad), 0
+      );
+      
+      // Productos recientes (últimos 5)
+      this.productosRecientes = itemsInventario.slice(0, 5);
+      
+      // Cargar compras
+      const compras = await this.compraService.listarComprasPorUsuario(usuarioId);
+      this.totalComprasRealizadas = compras.length;
+      this.comprasRecientes = compras.slice(0, 3);
+      
+      this.cargando = false;
+    } catch (error) {
+      console.error('Error al cargar estadísticas:', error);
+      this.cargando = false;
+    }
+  }
+
+  get saludo(): string {
+    const hora = new Date().getHours();
+    if (hora < 12) return 'Buenos días';
+    if (hora < 19) return 'Buenas tardes';
+    return 'Buenas noches';
   }
 }

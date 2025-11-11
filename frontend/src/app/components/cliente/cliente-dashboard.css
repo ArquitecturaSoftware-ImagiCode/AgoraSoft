@@ -1,0 +1,174 @@
+/* ======== LAYOUT GENERAL ======== */
+main {
+  display: flex;
+  background-color: #f3f4f6; /* bg-gray-100 */
+  min-height: 100vh; /* min-h-screen */
+  font-family: 'Inter', sans-serif;
+}
+
+/* ======== SIDEBAR ======== */
+.h-\[100vh\] {
+  height: 100vh; /* h-[100vh] */
+}
+
+.bg-blue-900 {
+  background-color: #1e3a8a; /* azul oscuro */
+}
+
+.w-72 {
+  width: 18rem; /* ancho fijo */
+}
+
+.p-5 {
+  padding: 1.25rem;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.fixed {
+  position: fixed;
+}
+
+/* ======== LOGO ======== */
+.w-40 {
+  width: 10rem;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+img {
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+/* ======== BOTÓN LOGOUT ======== */
+button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem; /* py-3 px-5 */
+  border-radius: 0.5rem; /* rounded-lg */
+  border: none;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+button:hover {
+  color: #1e3a8a; /* hover:text-blue-900 */
+  background-color: white; /* hover:bg-white */
+}
+
+/* ======== CONTENIDO PRINCIPAL ======== */
+.w-full {
+  width: 100%;
+}
+
+.sm\:ml-72 {
+  margin-left: 18rem;
+}
+
+.lg\:ml-52 {
+  margin-left: 13rem;
+}
+
+.lg\:pl-30 {
+  padding-left: 7.5rem;
+}
+
+.lg\:pr-10 {
+  padding-right: 2.5rem;
+}
+
+.pb-12 {
+  padding-bottom: 3rem;
+}
+
+.pt-5 {
+  padding-top: 1.25rem;
+}
+
+/* ======== TARJETA ======== */
+.p-6 {
+  padding: 1.5rem;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.rounded-lg {
+  border-radius: 0.75rem;
+}
+
+/* ======== TEXTO ======== */
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-blue-900 {
+  color: #1e3a8a;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.text-gray-700 {
+  color: #374151;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 1024px) {
+  .lg\:ml-52 {
+    margin-left: 0;
+  }
+  .lg\:pl-30,
+  .lg\:pr-10 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .sm\:ml-72 {
+    margin-left: 0;
+  }
+}

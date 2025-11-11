@@ -1,0 +1,249 @@
+/* Estilos para la página de compras */
+
+/* Header del catálogo */
+.catalogo-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+}
+
+/* Grid de productos - CSS Grid para layout perfecto */
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Wrapper de cada producto */
+.producto-card-wrapper {
+  display: flex;
+}
+
+/* Card individual de producto */
+.producto-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.producto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Icono del producto */
+.producto-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  transition: background 0.3s ease;
+}
+
+.producto-card:hover .producto-icon {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* Contenido del producto */
+.producto-content {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Header del producto (nombre y categoría) */
+.producto-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.producto-nombre {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  color: #2d3748;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.producto-categoria {
+  background: #e2e8f0;
+  color: #4a5568;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Descripción */
+.producto-descripcion {
+  font-size: 0.75rem;
+  color: #718096;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+/* Footer (precio y botón) */
+.producto-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.producto-precio {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #38a169;
+}
+
+.btn-agregar {
+  background: #4299e1;
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.btn-agregar:hover {
+  background: #3182ce;
+  transform: scale(1.1);
+}
+
+/* Proveedor */
+.producto-proveedor {
+  font-size: 0.7rem;
+  color: #a0aec0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .productos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .productos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Panel de selección */
+.sticky-top {
+  position: sticky;
+  z-index: 100;
+}
+
+.producto-seleccionado {
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Botones */
+.btn-success {
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+}
+
+/* Cards */
+.card {
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-header {
+  border-bottom: none;
+  font-weight: 600;
+}
+
+/* Input groups */
+.input-group .btn {
+  border-radius: 0;
+}
+
+.input-group .btn:first-child {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+
+.input-group .btn:last-child {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+.input-group input[type="number"] {
+  width: 60px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .sticky-top {
+    position: relative;
+    top: 0 !important;
+  }
+}
+
+/* Animaciones */
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
