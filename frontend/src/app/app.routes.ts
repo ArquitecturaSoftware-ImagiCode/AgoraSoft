@@ -13,8 +13,15 @@ import { VentasComponent } from './pages/operador/ventas/ventas';
 import { HistorialVentasComponent } from './pages/operador/historial-ventas/historial-ventas';
 import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
+import { ClienteDashboardPage } from './components/cliente/dashboard/dashboard-page';
+import { ClienteLoginPage } from './components/cliente/login/login-page';
+import { ClienteRegisterPage } from './components/cliente/register/register-page';
+import { EmpleadoPagina } from './pages/empleado-pagina/empleado-pagina';
 
 export const routes: Routes = [
+  { path: 'cliente/register', component: ClienteRegisterPage },
+  { path: 'cliente/login', component: ClienteLoginPage },
+  { path: 'cliente/dashboard', component: ClienteDashboardPage },
   { path: 'register', component: SignUpPage },
   { path: '', component: SignInPage },
   {
@@ -71,6 +78,9 @@ export const routes: Routes = [
         path: 'historial-ventas',
         component: HistorialVentasComponent,
       },
+        path: 'registro-empleados',
+        component:EmpleadoPagina
+      }
     ],
   },
 ];
