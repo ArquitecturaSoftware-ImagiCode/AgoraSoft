@@ -11,6 +11,7 @@ import { ComprasComponent } from './pages/operador/compras/compras';
 import { HistorialComprasComponent } from './pages/operador/historial-compras/historial-compras';
 import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
+import { EmpleadoPagina } from './pages/empleado-pagina/empleado-pagina';
 
 export const routes: Routes = [
   { path: 'register', component: SignUpPage },
@@ -61,6 +62,10 @@ export const routes: Routes = [
         path: 'historial-compras',
         component: HistorialComprasComponent,
       },
+      {
+        path: 'registro-empleados',
+        component:EmpleadoPagina
+      }
     ],
   },
 ];

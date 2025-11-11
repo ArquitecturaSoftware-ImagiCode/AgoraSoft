@@ -38,12 +38,21 @@
         Historial Compras
       </a>
 
+      <a
+        class="flex mt-3 py-3 px-5 rounded-lg gap-2 text-white hover:text-blue-900 hover:bg-white transition-all duration-300"
+        routerLink="/operador/registro-empleados"
+        routerLinkActive="bg-white text-blue-900"
+      >
+      <lucide-angular [img]="ApplicantsIcon" class="size-5"></lucide-angular>
+      Registro Empleados
+      </a>
+
       <button
         class="w-full flex mt-3 py-3 px-5 rounded-lg gap-2 text-white hover:text-blue-900 hover:bg-white transition-all duration-300"
         (click)="cerrarSesion()"
         type="button"
       >
-        <lucide-angular [img]="LogoutIcon" class="size-5"></lucide-angular>
+        <lucide-angular [img]="ApplicantsIcon" class="size-5"></lucide-angular>
         Cerrar Sesión
       </button>
     </div>
