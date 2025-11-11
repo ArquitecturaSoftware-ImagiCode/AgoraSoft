@@ -10,7 +10,7 @@ public class FilterConfig {
     public FilterRegistrationBean<ClerkAuthFilter> clerkAuthFilterRegistration(ClerkAuthFilter filter) {
         FilterRegistrationBean<ClerkAuthFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(filter);
-        registration.addUrlPatterns("/api/usuario", "/api/protegida/*"); // solo estas rutas requieren Clerk
+        registration.addUrlPatterns("/api/usuario", "/api/protegida/*", "/api/productos/*");
         registration.setOrder(1);
         return registration;
     }

@@ -1,0 +1,99 @@
+<div class="prov-productos-wrapper">
+  <div class="card">
+    <header class="card-header">
+      <h2 class="title">Registrar nuevo producto</h2>
+      <p class="subtitle">
+        Agrega los detalles para que los operadores puedan visualizar y comprar.
+      </p>
+    </header>
+
+    <form class="product-form" (ngSubmit)="onSubmit()" #formRef="ngForm" novalidate>
+      <div class="row">
+        <label for="nombre">Nombre del producto *</label>
+        <input
+          id="nombre"
+          name="nombre"
+          [(ngModel)]="nombre"
+          required
+          placeholder="Ej: Tomate Premium"
+        />
+        <div class="field-error" *ngIf="submitted && !nombre">El nombre es obligatorio</div>
+      </div>
+
+      <div class="row">
+        <label for="descripcion">Descripción</label>
+        <textarea
+          id="descripcion"
+          name="descripcion"
+          rows="4"
+          [(ngModel)]="descripcion"
+          placeholder="Información adicional, presentación, unidad de medida..."
+        ></textarea>
+      </div>
+
+      <div class="row grid-2">
+        <div>
+          <label for="precio">Precio (COP) *</label>
+          <input
+            id="precio"
+            name="precio"
+            type="number"
+            min="0"
+            step="0.01"
+            [(ngModel)]="precio"
+            required
+            placeholder="0.00"
+          />
+          <div class="field-error" *ngIf="submitted && (precio === null || precio === undefined)">
+            El precio es obligatorio
+          </div>
+        </div>
+
+        <div>
+          <label for="categoria">Categoría *</label>
+          <input
+            id="categoria"
+            name="categoria"
+            [(ngModel)]="categoria"
+            required
+            placeholder="Ej: Hortalizas"
+          />
+          <div class="field-error" *ngIf="submitted && !categoria">La categoría es obligatoria</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <label for="imagenUrl">URL de imagen (opcional)</label>
+        <input
+          id="imagenUrl"
+          name="imagenUrl"
+          [(ngModel)]="imagenUrl"
+          type="url"
+          placeholder="https://... (opcional)"
+          (input)="onImagenUrlChange()"
+        />
+        <small class="hint"
+          >Si no tienes URL, puedes subir la imagen después usando el endpoint
+          /api/productos/&#123;id&#125;/imagen</small
+        >
+      </div>
+
+      <div class="row image-preview" *ngIf="imagenPreview">
+        <label>Vista previa</label>
+        <img [src]="imagenPreview" alt="Preview imagen" (error)="imagenPreview = null" />
+      </div>
+
+      <div class="actions">
+        <button class="btn primary" type="submit" [disabled]="submitting">
+          {{ submitting ? 'Guardando...' : 'Crear producto' }}
+        </button>
+        <button class="btn secondary" type="button" (click)="resetForm()" [disabled]="submitting">
+          Limpiar
+        </button>
+      </div>
+
+      <div *ngIf="message" class="message success">{{ message }}</div>
+      <div *ngIf="error" class="message error">{{ error }}</div>
+    </form>
+  </div>
+</div>

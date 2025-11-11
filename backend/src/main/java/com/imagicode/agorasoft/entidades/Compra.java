@@ -26,10 +26,11 @@ public class Compra {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    // Proveedor o vendedor (si es una compra de insumos)
+    // Usuario que actúa como proveedor
     @ManyToOne(optional = false)
     @JoinColumn(name = "proveedor_id", nullable = false)
-    private Proveedor proveedor;
+    private Usuario proveedor;
+
 
     // Fecha de la compra
     @Column(name = "fecha_compra", nullable = false)

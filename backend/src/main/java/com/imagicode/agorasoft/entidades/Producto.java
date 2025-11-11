@@ -29,6 +29,6 @@ public class Producto {
     
     // Proveedor que vende este producto
     @ManyToOne(optional = false)
-    @JoinColumn(name = "proveedor_id", nullable = false)
-    private Proveedor proveedor;
+    @JoinColumn(name = "usuario_proveedor", nullable = false)
+    private Usuario usuarioProveedor;
 }

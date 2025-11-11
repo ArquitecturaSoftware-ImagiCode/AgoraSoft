@@ -1,12 +1,9 @@
+import { Usuario } from "./ItemInventario";
+
 export interface Compra {
   id?: number;
-  usuario: {
-    id: string;
-  };
-  proveedor: {
-    id: number;
-    nombre: string;
-  };
+  usuario: Usuario
+  proveedor: Usuario
   fechaCompra: string;
   total: number;
   detalles: DetalleCompra[];

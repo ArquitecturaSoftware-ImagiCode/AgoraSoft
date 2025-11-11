@@ -13,43 +13,57 @@ public class CompraService {
 
     private final CompraRepository compraRepository;
     private final ProductoRepository productoRepository;
-    private final ProveedorRepository proveedorRepository;
     private final ItemInventarioService itemInventarioService;
+    private final UsuarioRepository usuarioRepository;
 
     public CompraService(CompraRepository compraRepository,
             ProductoRepository productoRepository,
-            ProveedorRepository proveedorRepository,
+            UsuarioRepository usuarioRepository,
             ItemInventarioService itemInventarioService) {
+        this.usuarioRepository= usuarioRepository;
         this.compraRepository = compraRepository;
         this.productoRepository = productoRepository;
-        this.proveedorRepository = proveedorRepository;
         this.itemInventarioService = itemInventarioService;
     }
 
     @Transactional
     public Compra registrarCompra(Compra compra) {
+        System.out.println(compra);
         compra.setFechaCompra(LocalDateTime.now());
 
-        // Vincular proveedor desde la BD
-        compra.setProveedor(
-                proveedorRepository.findById(compra.getProveedor().getId())
-                        .orElseThrow(() -> new RuntimeException("Proveedor no encontrado")));
+        // Buscar usuario comprador
+        Usuario usuario = usuarioRepository.findById(compra.getUsuario().getId())
+                .orElseThrow(() -> new RuntimeException("Usuario comprador no encontrado"));
 
-        // Asignar detalles
+        // Buscar proveedor
+        Usuario proveedor = usuarioRepository.findById(compra.getProveedor().getId())
+                .orElseThrow(() -> new RuntimeException("Usuario proveedor no encontrado"));
+
+        if (!"PROVEEDOR".equalsIgnoreCase(proveedor.getRol())) {
+            throw new RuntimeException("El usuario seleccionado no tiene rol de proveedor");
+        }
+
+        // Reasignar las entidades gestionadas (JPA necesita entidades persistentes)
+        compra.setUsuario(usuario);
+        compra.setProveedor(proveedor);
+
+        // Procesar detalles de la compra
         compra.getDetalles().forEach(detalle -> {
             detalle.setCompra(compra);
             detalle.setProducto(
                     productoRepository.findById(detalle.getProducto().getId())
-                            .orElseThrow(() -> new RuntimeException("Producto no encontrado")));
+                            .orElseThrow(() -> new RuntimeException("Producto no encontrado"))
+            );
             detalle.calcularSubtotal();
         });
 
         compra.calcularTotal();
+
         Compra compraGuardada = compraRepository.save(compra);
-        
-        // Actualizar inventario del usuario
-        actualizarInventarioUsuario(compra);
-        
+
+        // Actualizar inventario
+        actualizarInventarioUsuario(compraGuardada);
+
         return compraGuardada;
     }
 

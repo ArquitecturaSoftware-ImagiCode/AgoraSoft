@@ -13,6 +13,9 @@ import { VentasComponent } from './pages/operador/ventas/ventas';
 import { HistorialVentasComponent } from './pages/operador/historial-ventas/historial-ventas';
 import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
+import { ProvVentas } from './pages/proveedor/prov-ventas/prov-ventas';
+import { ProvProductos } from './pages/proveedor/prov-productos/prov-productos';
+
 import { ClienteDashboardPage } from './components/cliente/dashboard/dashboard-page';
 import { ClienteLoginPage } from './components/cliente/login/login-page';
 import { ClienteRegisterPage } from './components/cliente/register/register-page';
@@ -23,7 +26,7 @@ export const routes: Routes = [
   { path: 'cliente/login', component: ClienteLoginPage },
   { path: 'cliente/dashboard', component: ClienteDashboardPage },
   { path: 'register', component: SignUpPage },
-  { path: '', component: SignInPage },
+  { path: 'login', component: SignInPage },
   {
     path: 'comercial',
     component: ComercialLayout,
@@ -37,16 +40,15 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'proveedor',
-    component: ProveedorLayout,
-    canActivate: [AuthGuard],
-    data: { role: 'proveedor' },
-    children: [
-      {
-        path: 'dashboard',
-        component: ProveedorDashboard,
-      },
-    ],
+  path: 'proveedor',
+  component: ProveedorLayout,
+  canActivate: [AuthGuard],
+  data: { role: 'proveedor' },
+  children: [
+    { path: 'dashboard', component: ProveedorDashboard },
+    { path: 'productos', component: ProvProductos },
+    { path: 'venta', component: ProvVentas },
+  ],
   },
   {
     path: 'operador',
@@ -78,6 +80,7 @@ export const routes: Routes = [
         path: 'historial-ventas',
         component: HistorialVentasComponent,
       },
+      {
         path: 'registro-empleados',
         component:EmpleadoPagina
       }

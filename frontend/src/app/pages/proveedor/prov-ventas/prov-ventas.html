@@ -1,0 +1,250 @@
+<div class="py-4">
+  <h1 class="text-3xl font-bold mb-3">Registrar venta</h1>
+
+  <!-- Barra de control -->
+  <div class="p-4 mb-6 rounded-lg shadow bg-base-100 flex flex-wrap gap-4 items-end justify-between">
+
+    <!-- Título + icono -->
+    <div class="flex items-center gap-3">
+      <div class="rounded-full bg-primary text-white w-10 h-10 flex items-center justify-center">
+        <!-- Cash Register Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h6v6M5 17h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <small class="text-sm text-base-content/60">Gestión de operador y productos</small>
+    </div>
+
+    <!-- Controles -->
+    <div class="flex flex-wrap items-end gap-3 justify-end flex-grow">
+
+      <!-- Selección de operador -->
+      <div class="form-control w-full sm:w-56">
+        <label for="operador" class="label">
+          <span class="label-text text-sm text-base-content/60">Operador</span>
+        </label>
+        <select
+          id="operador"
+          class="select select-bordered select-sm w-full"
+          [(ngModel)]="operadorSeleccionado"
+        >
+          <option value="">Selecciona un operador...</option>
+          <option *ngFor="let operador of operadores" [value]="operador.id">
+            {{ operador.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Búsqueda -->
+      <div class="form-control w-full sm:w-72">
+        <label for="busqueda" class="label">
+          <span class="label-text text-sm text-base-content/60">Buscar producto</span>
+        </label>
+
+        <div class="flex items-center gap-2">
+          <label class="input input-bordered input-sm flex items-center gap-2 w-full">
+            <!-- Search Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input
+              id="busqueda"
+              type="text"
+              class="grow"
+              placeholder="Nombre, categoría..."
+              [(ngModel)]="terminoBusqueda"
+              (input)="buscarProducto()"
+            />
+          </label>
+
+          <button
+            class="btn btn-sm btn-outline btn-primary"
+            (click)="cargarProductos()"
+            title="Actualizar lista"
+          >
+            <!-- Rotate Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M4 20v-5h5M20 4v5h-5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="flex flex-col lg:flex-row gap-6">
+    <!-- Catálogo de productos -->
+    <div class="flex-grow">
+      <!-- Mensaje de carga -->
+      <div *ngIf="cargando" class="text-center py-10">
+        <span class="loading loading-spinner loading-lg text-primary"></span>
+        <p class="mt-3 text-base-content/60">Cargando productos...</p>
+      </div>
+
+      <!-- Grid de productos -->
+      <div *ngIf="!cargando && productos.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div
+          class="card bg-base-100 shadow-md hover:shadow-lg transition cursor-pointer"
+          *ngFor="let producto of productos || productosFiltrados"
+          (click)="agregarProducto(producto)"
+        >
+          <div class="card-body items-center text-center">
+            <div class="text-4xl text-primary">
+              <!-- Box Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7V4a1 1 0 00-1-1h-3M4 7V4a1 1 0 011-1h3m0 0v3m0-3h6v3m0 0H5m14 3v10a1 1 0 01-1 1H6a1 1 0 01-1-1V10m0 0l6 3 6-3"/>
+              </svg>
+            </div>
+
+            <h6 class="font-bold text-lg mt-2">{{ producto.nombre }}</h6>
+            <p class="text-sm text-base-content/60">{{ producto.categoria || 'General' }}</p>
+            <p class="text-xs text-base-content/70">{{ producto.descripcion || 'Sin descripción disponible' }}</p>
+
+            <div class="flex justify-between items-center w-full mt-3">
+              <span class="font-semibold text-success">
+                ${{ producto.precio | number:'1.0-0' }}
+              </span>
+              <button
+                class="btn btn-sm btn-outline btn-success rounded-full"
+                (click)="agregarProducto(producto); $event.stopPropagation()"
+                title="Agregar producto"
+              >
+                <!-- Cart Plus Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8h13.2L17 13M7 13H3M17 13h4M12 5v6m3-3H9"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensaje si no hay productos -->
+      <div *ngIf="!cargando && productos.length === 0" class="text-center py-10">
+        <!-- Box Open Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-base-content/40 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12v7a1 1 0 01-1 1H5a1 1 0 01-1-1v-7m16 0l-8-4-8 4"/>
+        </svg>
+        <h5 class="text-base-content/60">No se encontraron productos</h5>
+      </div>
+    </div>
+
+    <!-- Carrito / Selección actual -->
+    <div class="lg:w-96 w-full">
+      <div class="card bg-base-100 shadow-md sticky top-4">
+        <div class="card-title bg-success text-success-content p-4">
+          <h5>Selección Actual</h5>
+        </div>
+        <div class="card-body p-4">
+          <ng-container *ngIf="productosSeleccionados.length > 0; else vacio">
+            <div
+              class="p-3 mb-3 bg-base-200 rounded-lg shadow-sm"
+              *ngFor="let item of productosSeleccionados"
+            >
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <h6 class="font-medium">{{ item.producto.nombre }}</h6>
+                  <small class="text-base-content/60">
+                    ${{ item.producto.precio | number:'1.0-0' }} c/u
+                  </small>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1">
+                  <!-- Minus Button -->
+                  <button
+                    class="btn btn-xs btn-outline"
+                    (click)="actualizarCantidad(item.producto.id!, item.cantidad - 1)"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                    </svg>
+                  </button>
+                  <input
+                    type="number"
+                    class="input input-bordered input-xs text-center w-14"
+                    [(ngModel)]="item.cantidad"
+                    (change)="actualizarCantidad(item.producto.id!, item.cantidad)"
+                    min="1"
+                  />
+                  <!-- Plus Button -->
+                  <button
+                    class="btn btn-xs btn-outline"
+                    (click)="actualizarCantidad(item.producto.id!, item.cantidad + 1)"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                  </button>
+                  <!-- Trash Button -->
+                  <button
+                    class="btn btn-xs btn-error text-white"
+                    (click)="quitarProducto(item.producto.id!)"
+                    title="Quitar"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <strong class="text-success">
+                  ${{ (item.producto.precio * item.cantidad) | number:'1.0-0' }}
+                </strong>
+              </div>
+            </div>
+
+            <div class="border-t border-base-300 pt-3 mb-3">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-base-content/60">Productos:</span>
+                <strong>{{ cantidadTotalProductos }} unidades</strong>
+              </div>
+              <div class="flex justify-between items-center">
+                <h5>Total:</h5>
+                <h4 class="text-success">
+                  ${{ totalCompra | number:'1.0-0' }}
+                </h4>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <!-- Finalizar Compra -->
+              <button
+                class="btn btn-success w-full"
+                (click)="procesarCompra()"
+                [disabled]="procesandoCompra"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                {{ procesandoCompra ? 'Procesando...' : 'Finalizar Compra' }}
+              </button>
+              <!-- Limpiar Todo -->
+              <button
+                class="btn btn-outline btn-error w-full"
+                (click)="limpiarSeleccion()"
+                [disabled]="procesandoCompra"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                Limpiar Todo
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-template #vacio>
+            <div class="text-center py-10">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-base-content/40 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8h13.2L17 13M7 13H3M17 13h4"/>
+              </svg>
+              <h6 class="text-base-content/60">No has seleccionado productos</h6>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -31,5 +31,10 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
+    public List<Usuario> obtenerUsuariosPorRol(String rol) {
+        return usuarioRepository.findByRolIgnoreCase(rol);
+    }
+
+
 
 }
