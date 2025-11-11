@@ -11,6 +11,18 @@ CREATE TABLE IF NOT EXISTS inventario.usuario (
     correo VARCHAR(255)
     );
 
+    CREATE TABLE IF NOT EXISTS inventario.empleado (
+    id CHAR(36) NOT NULL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    correo VARCHAR(150) NOT NULL UNIQUE,
+    rol VARCHAR(50) NOT NULL,
+    departamento VARCHAR(100),
+    telefono VARCHAR(20),
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 GRANT ALL PRIVILEGES ON TABLE inventario.usuario TO postgres;
 
 DO $$

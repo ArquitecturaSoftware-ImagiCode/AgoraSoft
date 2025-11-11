@@ -14,6 +14,7 @@ import { OperadorLayout } from './layouts/operador-layout/operador-layout';
 import { ClienteDashboardPage } from './components/cliente/dashboard/dashboard-page';
 import { ClienteLoginPage } from './components/cliente/login/login-page';
 import { ClienteRegisterPage } from './components/cliente/register/register-page';
+import { EmpleadoPagina } from './pages/empleado-pagina/empleado-pagina';
 
 export const routes: Routes = [
   { path: 'cliente/register', component: ClienteRegisterPage },
@@ -67,6 +68,10 @@ export const routes: Routes = [
         path: 'historial-compras',
         component: HistorialComprasComponent,
       },
+      {
+        path: 'registro-empleados',
+        component:EmpleadoPagina
+      }
     ],
   },
 ];
