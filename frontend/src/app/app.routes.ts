@@ -16,8 +16,15 @@ import { OperadorLayout } from './layouts/operador-layout/operador-layout';
 import { ProvVentas } from './pages/proveedor/prov-ventas/prov-ventas';
 import { ProvProductos } from './pages/proveedor/prov-productos/prov-productos';
 
+import { ClienteDashboardPage } from './components/cliente/dashboard/dashboard-page';
+import { ClienteLoginPage } from './components/cliente/login/login-page';
+import { ClienteRegisterPage } from './components/cliente/register/register-page';
+import { EmpleadoPagina } from './pages/empleado-pagina/empleado-pagina';
 
 export const routes: Routes = [
+  { path: 'cliente/register', component: ClienteRegisterPage },
+  { path: 'cliente/login', component: ClienteLoginPage },
+  { path: 'cliente/dashboard', component: ClienteDashboardPage },
   { path: 'register', component: SignUpPage },
   { path: 'login', component: SignInPage },
   {
@@ -73,6 +80,10 @@ export const routes: Routes = [
         path: 'historial-ventas',
         component: HistorialVentasComponent,
       },
+      {
+        path: 'registro-empleados',
+        component:EmpleadoPagina
+      }
     ],
   },
 ];

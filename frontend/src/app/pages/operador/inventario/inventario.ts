@@ -71,7 +71,17 @@ export class InventarioComponent implements OnInit {
 
 
   comprarAProveedores() {
-    this.router.navigate(['/operador/compras']);
+   this.router.navigate(['/operador/compras']);
+   const mensaje = `Funcionalidad de Compra a Proveedores
+    
+Esta funcionalidad te permitirá:
+- Ver catálogo de productos disponibles
+- Agregar productos al inventario
+- Realizar pedidos a proveedores
+- Gestionar compras y entregas
+    
+Próximamente disponible!`;
+    alert(mensaje);
   }
 
   editarCantidad(item: ItemInventario) {
