@@ -78,6 +78,7 @@ export const routes: Routes = [
         path: 'historial-ventas',
         component: HistorialVentasComponent,
       },
+      {
         path: 'registro-empleados',
         component:EmpleadoPagina
       }
