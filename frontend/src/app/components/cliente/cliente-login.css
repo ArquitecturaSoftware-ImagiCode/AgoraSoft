@@ -1,0 +1,20 @@
+.fieldset {
+  border: none;
+}
+
+legend {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #1e3a8a; /* azul oscuro */
+}
+
+.input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

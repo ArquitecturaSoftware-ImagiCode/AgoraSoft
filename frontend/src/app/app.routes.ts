@@ -11,9 +11,15 @@ import { ComprasComponent } from './pages/operador/compras/compras';
 import { HistorialComprasComponent } from './pages/operador/historial-compras/historial-compras';
 import { ProveedorLayout } from './layouts/proveedor-layout/proveedor-layout';
 import { OperadorLayout } from './layouts/operador-layout/operador-layout';
+import { ClienteDashboardPage } from './components/cliente/dashboard/dashboard-page';
+import { ClienteLoginPage } from './components/cliente/login/login-page';
+import { ClienteRegisterPage } from './components/cliente/register/register-page';
 import { EmpleadoPagina } from './pages/empleado-pagina/empleado-pagina';
 
 export const routes: Routes = [
+  { path: 'cliente/register', component: ClienteRegisterPage },
+  { path: 'cliente/login', component: ClienteLoginPage },
+  { path: 'cliente/dashboard', component: ClienteDashboardPage },
   { path: 'register', component: SignUpPage },
   { path: '', component: SignInPage },
   {
