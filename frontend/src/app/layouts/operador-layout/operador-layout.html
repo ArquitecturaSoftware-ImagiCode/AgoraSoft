@@ -1,11 +1,11 @@
 <main class="flex bg-gray-100 min-h-screen">
-  <div class="h-[100vh] bg-blue-900 w-72 p-5 shadow-sm border border-gray-200 fixed">
+  <div class="h-[100vh] bg-blue-900 w-72 p-5 shadow-sm fixed">
     <img class="w-40 h-10" src="/logowhite.svg" alt="Logo" />
     <div class="w-full flex-col mt-10">
       <a 
         class="flex py-3 px-5 rounded-lg gap-2 text-white hover:text-blue-900 hover:bg-white transition-all duration-300"
         routerLink="/operador/dashboard"
-        routerLinkActive="bg-white text-blue-900"
+        routerLinkActive="!bg-white !text-blue-900"
       >
         <lucide-angular [img]="DashboardIcon" class="size-5"></lucide-angular>
         Dashboard
@@ -14,7 +14,7 @@
       <a
         class="flex mt-3 py-3 px-5 rounded-lg gap-2 text-white hover:text-blue-900 hover:bg-white transition-all duration-300"
         routerLink="/operador/compras"
-        routerLinkActive="bg-white text-blue-900"
+        routerLinkActive="!bg-white !text-blue-900"
       >
         <lucide-angular [img]="ApplicantsIcon" class="size-5"></lucide-angular>
         Comprar Productos
@@ -23,7 +23,7 @@
       <a
         class="flex mt-3 py-3 px-5 rounded-lg gap-2 text-white hover:text-blue-900 hover:bg-white transition-all duration-300"
         routerLink="/operador/inventario"
-        routerLinkActive="bg-white text-blue-900"
+        routerLinkActive="!bg-white !text-blue-900"
       >
         <lucide-angular [img]="ProjectIcon" class="size-5"></lucide-angular>
         Inventario
@@ -32,7 +32,7 @@
       <a
         class="flex mt-3 py-3 px-5 rounded-lg gap-2 text-white hover:text-blue-900 hover:bg-white transition-all duration-300"
         routerLink="/operador/historial-compras"
-        routerLinkActive="bg-white text-blue-900"
+        routerLinkActive="!bg-white !text-blue-900"
       >
         <lucide-angular [img]="ProfileIcon" class="size-5"></lucide-angular>
         Historial Compras
@@ -41,7 +41,7 @@
       <a
         class="flex mt-3 py-3 px-5 rounded-lg gap-2 text-white hover:text-blue-900 hover:bg-white transition-all duration-300"
         routerLink="/operador/ventas"
-        routerLinkActive="bg-white text-blue-900"
+        routerLinkActive="!bg-white !text-blue-900"
       >
         <lucide-angular [img]="PlansIcon" class="size-5"></lucide-angular>
         Registrar Ventas
@@ -50,7 +50,7 @@
 <a
   class="flex mt-3 py-3 px-5 rounded-lg gap-2 text-white hover:text-blue-900 hover:bg-white transition-all duration-300"
   routerLink="/operador/historial-ventas"
-  routerLinkActive="bg-white text-blue-900"
+        routerLinkActive="!bg-white !text-blue-900"
 >
   <lucide-angular [img]="ChatIcon" class="size-5"></lucide-angular>
   Historial Ventas
@@ -59,7 +59,7 @@
 <a
   class="flex mt-3 py-3 px-5 rounded-lg gap-2 text-white hover:text-blue-900 hover:bg-white transition-all duration-300"
   routerLink="/operador/registro-empleados"
-  routerLinkActive="bg-white text-blue-900"
+        routerLinkActive="!bg-white !text-blue-900"
 >
   <lucide-angular [img]="ApplicantsIcon" class="size-5"></lucide-angular>
   Registro Empleados
