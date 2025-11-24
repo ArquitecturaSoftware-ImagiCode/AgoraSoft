@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule, JsonPipe } from '@angular/common';
 import {environment} from '../../../../environments/environments';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-proveedor-dashboard',
@@ -13,7 +15,7 @@ export class ProveedorDashboard implements OnInit {
   token: string = '';
   usuario: any = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   async ngOnInit() {
     // Espera a que Clerk esté inicializado y el usuario esté autenticado
@@ -23,7 +25,6 @@ export class ProveedorDashboard implements OnInit {
       return;
     }
     this.token = (await this.authService.getToken()) || '';
-    console.log('Token obtenido:', this.token);
     if (!this.token) {
       console.error('No se obtuvo un token válido.');
       return;
@@ -44,5 +45,16 @@ export class ProveedorDashboard implements OnInit {
       console.error('Error al obtener usuario:', error);
     }
   }
+
+  goToProductos() {
+  this.router.navigate(['/proveedor/productos']);
+  }
+
+  goToVenta() {
+    this.router.navigate(['/proveedor/venta']);
+  }
+
+
+
 }
 

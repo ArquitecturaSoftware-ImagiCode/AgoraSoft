@@ -1,12 +1,51 @@
-<main>
-  <h1 class="text-3xl font-bold">Dashboard Proveedor</h1>
-  <div>
-    <div *ngIf="usuario">
-      <h2>Usuario</h2>
-      <pre>{{ usuario | json }}</pre>
-    </div>
-    <div *ngIf="!usuario">
-      <p>No se pudo cargar la información del usuario.</p>
+<main class="p-6 space-y-6">
+  <h1 class="text-3xl font-bold mb-4">Dashboard de Proveedor</h1>
+
+  <!-- Usuario -->
+  <div *ngIf="usuario" class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title">Información del Proveedor</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p><strong>Nombre:</strong> {{ usuario.nombre }} {{ usuario.apellido }}</p>
+        <p><strong>Correo:</strong> {{ usuario.correo }}</p>
+        <p><strong>Rol:</strong> {{ usuario.rol }}</p>
+        <p><strong>Organización:</strong> {{ usuario.organizacion }}</p>
+      </div>
     </div>
   </div>
+
+  <!-- Loading/Error -->
+  <div *ngIf="!usuario" class="alert alert-error">
+    <span>No se pudo cargar la información del usuario.</span>
+  </div>
+
+  <!-- Tarjetas de acciones -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+  <!-- Registrar Productos -->
+  <div class="card bg-primary text-primary-content shadow-md hover:shadow-xl transition-all">
+    <div class="card-body">
+      <h3 class="card-title">Registrar productos</h3>
+      <p>Agrega o administra tus productos disponibles.</p>
+      <div class="card-actions justify-end">
+        <button class="btn" (click)="goToProductos()">Ir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registrar Venta -->
+  <div class="card bg-accent text-accent-content shadow-md hover:shadow-xl transition-all">
+    <div class="card-body">
+      <h3 class="card-title">Registrar venta</h3>
+      <p>Registra una nueva venta o pedido recibido.</p>
+      <div class="card-actions justify-end">
+        <button class="btn" (click)="goToVenta()">Ir</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
 </main>
